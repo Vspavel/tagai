@@ -21,3 +21,20 @@ export const schema = [
   `CREATE INDEX IF NOT EXISTS privacy_pending_idx ON privacy_requests(status, created_at)`,
   `CREATE INDEX IF NOT EXISTS request_limits_expiry_idx ON request_limits(expires_at)`
 ];
+// Additive, repeatable migration: the original app list remains compatible with v1.
+schema.push(
+  `ALTER TABLE waitlist_signups ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'active' CHECK (status IN ('active','withdrawn'))`,
+  `ALTER TABLE waitlist_signups ADD COLUMN IF NOT EXISTS withdrawn_at timestamptz`,
+  `CREATE TABLE IF NOT EXISTS visit_signups (LIKE waitlist_signups INCLUDING ALL)`,
+  `ALTER TABLE privacy_requests ADD COLUMN IF NOT EXISTS audience text NOT NULL DEFAULT 'app' CHECK (audience IN ('app','visits','both'))`,
+  `ALTER TABLE privacy_requests ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now()`,
+  `ALTER TABLE privacy_requests ADD COLUMN IF NOT EXISTS version integer NOT NULL DEFAULT 1`,
+  `ALTER TABLE privacy_requests ADD COLUMN IF NOT EXISTS resolution text NOT NULL DEFAULT ''`,
+  `ALTER TABLE privacy_requests ADD COLUMN IF NOT EXISTS resolution_note text NOT NULL DEFAULT ''`,
+  `ALTER TABLE privacy_requests ADD COLUMN IF NOT EXISTS resolved_at timestamptz`,
+  `CREATE TABLE IF NOT EXISTS privacy_actions (
+    id uuid PRIMARY KEY, request_id uuid NOT NULL REFERENCES privacy_requests(id) ON DELETE CASCADE,
+    action text NOT NULL, note text NOT NULL DEFAULT '', owner_verified boolean NOT NULL DEFAULT false,
+    created_at timestamptz NOT NULL DEFAULT now()
+  )`
+);

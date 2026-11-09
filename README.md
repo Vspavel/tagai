@@ -21,14 +21,14 @@ The development server on port 4174 uses an ephemeral PostgreSQL-compatible PGli
 - Vercel: project `tagai`, team `vspa`, Node 24, Frankfurt functions.
 - Neon: `tagai-waitlist`, Frankfurt. Database secrets are supplied by the Vercel integration.
 - Required sensitive variables: `DATABASE_URL`, `FORM_SECRET` (at least 32 random characters), `CRON_SECRET`.
-- Build: `npm test && npm run build`. It applies additive, idempotent schema creation before generating the static site. A deployed build fails if the database is unavailable.
+- Build: `npm test && npm run build`. It applies additive, idempotent schema creation before generating the static site. A production build fails if the database is unavailable. Preview builds skip migrations and all APIs fail closed; use the ephemeral development database for functional QA.
 - Push a feature branch, review its preview and CI results, then merge into `main` for production. This workflow requires the GitHub App to have access to this repository and the Vercel Git connection to be active.
 - Vercel preview authentication remains enabled. The custom production domain is public.
 - The daily authenticated `/api/cleanup` cron removes expired data. Do not remove `CRON_SECRET`.
 
 ## Waitlist operation
 
-Open Vercel → Storage → `tagai-waitlist` → Open in Neon → Tables. `waitlist_signups` contains the email, optional city, language, signup/consent timestamps and consent version. A unique normalized email prevents duplicate rows and prevents a new request from overwriting an existing choice.
+Open Vercel → Storage → `tagai-waitlist` → Open in Neon → Tables. `waitlist_signups` holds app early-access signups; `visit_signups` holds studio-visit signups independently. Each table contains the email, optional city, language, signup/consent timestamps and consent version. A unique normalized email prevents duplicate rows and prevents a new request from overwriting an existing choice.
 
 These are **unverified email registrations**, not application accounts. No password is collected, and this version does not send automatic emails. Confirm address ownership before sharing private information or granting account access. Set up an authenticated sender and an unsubscribe mechanism before sending launch invitations at scale.
 
@@ -38,17 +38,17 @@ The API has same-origin checks, request-size limits, input validation, signed ad
 
 ## Source and assets
 
-`src/locales.mjs` contains editorial translations; `src/forms.mjs` contains live form and privacy text. `build.mjs` generates `/en/`, `/fr/`, `/el/` and the English root. No front-end framework is needed for this landing page.
+`src/locales.mjs` contains editorial translations; `src/forms.mjs` contains privacy text and `src/flow.mjs` contains the separate signup flows and collection demonstration. `build.mjs` generates `/en/`, `/fr/`, `/el/` and the English root, plus localized `/visits/` and `/manage/` pages. No front-end framework is needed for this landing page.
 
 Photographs and TAGAI marks were supplied by the project owner for this website. They are not licensed for general reuse. Inter and Roboto Condensed are locally hosted under the included OFL licenses; no trial fonts are deployed.
 
 Only the landing page and waitlist are operational. Product descriptions refer to the planned March 2027 early access. Do not label studio participants or VIMA as confirmed commercial partners without an explicit agreement.
 
-## Private admin (v1.1)
+## Private admin (v1.2)
 
 The `admin/` directory is a separate Vercel project, `tagai-admin`, with root directory `admin`. **Vercel Authentication → All Deployments is mandatory**, including production domains. Do not add bypass links, public aliases or protection exceptions. Project users with deployment access can read the panel. The application uses the existing team's Vercel identity rather than storing passwords.
 
-Set `ADMIN_PROJECT_ID` to the admin project's exact ID for Production and Preview. Set `ADMIN_ENABLED=1` and connect the existing waitlist database in **Production only**. The data API fails closed on the public project, on previews, or without database configuration. Preview builds can show the UI but cannot read subscriber data. This API is read-only and does not implement deletion or sending invitations. All responses are private/no-store; no tracking is installed in the admin app.
+Set `ADMIN_PROJECT_ID` to the admin project's exact ID for Production and Preview. Set `ADMIN_ENABLED=1` and connect the existing waitlist database in **Production only**. The data API fails closed on the public project, on previews, or without database configuration. Preview builds can show the UI but cannot read subscriber data. The privacy API supports taking a request into work, scoped withdrawal, and scoped deletion after manual address-ownership verification. It checks Origin, an HttpOnly same-site CSRF cookie/token, the request version and an idempotency key; actions are logged atomically. Access/correction/other requests can be marked completed only after handling outside the panel. The panel does not send invitations or verification emails. All responses are private/no-store; no tracking is installed in the admin app.
 
 The panel offers email search, city/language/date filters, 50-row pagination, statistics, pending privacy requests and filtered CSV export (10,000-row limit). Date filters and charts use Asia/Nicosia. Internal QA registrations are excluded unless explicitly selected. CSV cells are escaped against spreadsheet formulas. Counts reflect database registrations; they do not imply verified email ownership.
 
@@ -61,3 +61,12 @@ Tracking only starts after explicit analytics consent (basic consent mode). Reje
 Events: `page_view`, `waitlist_cta_click`, `waitlist_form_start`, `waitlist_submit_success`, `waitlist_submit_error`. Configure `waitlist_submit_success` as a GA4 key event and disable automatic enhanced form/page tracking to prevent duplicate events. Success means an accepted submission; it intentionally does not reveal whether the email already existed. Compare GA4 conversions with unique registrations in the admin panel. Visitors who decline analytics or use blockers will not appear in GA4.
 
 Validate consent rejection, acceptance, withdrawal, successful and failed submissions in GA4 DebugView/Realtime before calling the Google integration complete. Analytics account setup and data collection cannot be verified without a real GA4 property.
+
+## Phase-one design changes (9 November 2026)
+
+- Main signup is for app early access. Studio visits have a separate page, form, consent version, table and admin filter. Existing records stay in the app list.
+- The three generated `demo-artwork*.webp` assets and sample notes form an explicitly synthetic collection demonstration. No real artist, artwork or venue is asserted; replace them when the owner supplies the real example.
+- Forms show field errors, pending states, honest retry states and a dedicated success panel. An explicit language switch carries the form draft once through session storage for at most 30 minutes and retains safe campaign labels; email never enters the URL.
+- Admin separates signups, analytics and requests. Reset clears filters synchronously; export uses the displayed applied filters. Failed refreshes identify stale data and disable export. Charts contain all 30 calendar days and may fail independently of rows. Counts are unique database records in the selected list; GA4 success events are accepted submissions, including retries.
+- Withdrawn records stay out of active lists and exports; repeating a public signup cannot silently reactivate them. Privacy requests identify app, visits or both; ownership verification remains manual.
+- Local `/admin/` and `/qa/` routes are development-only. The dev server uses a local CSRF cookie on HTTP; production always uses a Secure `__Host-` cookie and Vercel deployment protection.

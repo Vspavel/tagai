@@ -8,6 +8,7 @@ export default async function handler(req,res) {
     await database().transaction([
       'DELETE FROM request_limits WHERE expires_at < now()',
       'DELETE FROM waitlist_signups WHERE expires_at < now()',
+      'DELETE FROM visit_signups WHERE expires_at < now()',
       'DELETE FROM privacy_requests WHERE expires_at < now()'
     ]);
     return res.status(200).json({ok:true});
