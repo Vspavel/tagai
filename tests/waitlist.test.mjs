@@ -5,7 +5,7 @@ import { schema } from '../server/schema.mjs';
 import { createHandler } from '../server/waitlist.mjs';
 import { challenge, verifyChallenge, normalizeEmail, CONSENT_VERSION } from '../server/security.mjs';
 let pg;
-const env={DATABASE_URL:'test',FORM_SECRET:'test-secret-with-at-least-thirty-two-characters',VERCEL:'1',VERCEL_URL:'tagai-test.vercel.app'};
+const env={DATABASE_URL:'test',FORM_SECRET:'test-secret-with-at-least-thirty-two-characters',VERCEL:'1',VERCEL_ENV:'production',VERCEL_URL:'tagai-test.vercel.app'};
 const now=Date.now();let n=0;
 before(async()=>{pg=new PGlite();for(const s of schema)await pg.exec(s);});
 after(async()=>pg.close());
@@ -75,4 +75,22 @@ test('retention SQL removes only expired rows and can run repeatedly',async()=>{
 test('normalizes valid international domains and rejects malformed local parts',()=>{
   assert.equal(normalizeEmail('A+art@EXAMPLE.COM'),'a+art@example.com');
   for(const input of ['.a@example.com','a..b@example.com','a@-bad.com','a\n@example.com'])assert.equal(normalizeEmail(input),null);
+});
+test('app and visits have independent consent and deduplication',async()=>{
+ const r=await call({audience:'visits',city:'Paris',language:'fr'});assert.equal(r.status,200);
+ await call({audience:'visits',city:'London'});
+ const row=(await pg.query('SELECT * FROM visit_signups WHERE email=$1',['reader@example.com'])).rows[0];assert.equal(row.city,'Paris');assert.equal(row.consent_version,'2026-11-09-visits-v1');
+ assert.equal((await pg.query('SELECT city FROM waitlist_signups WHERE email=$1',['reader@example.com'])).rows[0].city,'Cyprus');
+ assert.equal((await call({audience:'invalid'})).status,400);
+ await pg.query("UPDATE visit_signups SET status='withdrawn' WHERE email=$1",['reader@example.com']);await call({audience:'visits'});assert.equal((await pg.query('SELECT status FROM visit_signups WHERE email=$1',['reader@example.com'])).rows[0].status,'withdrawn');
+});
+test('retrying the same privacy request does not duplicate the queue',async()=>{
+ const requestId=crypto.randomUUID(),body={kind:'privacy',audience:'visits',requestId,requestType:'withdraw',message:''};
+ assert.equal((await call(body)).status,200);assert.equal((await call(body)).status,200);
+ const rows=(await pg.query('SELECT * FROM privacy_requests WHERE id=$1',[requestId])).rows;assert.equal(rows.length,1);assert.equal(rows[0].audience,'visits');
+});
+
+test('preview deployments cannot access production data or accept signups',async()=>{
+ const never=()=>{throw new Error('Preview must not reach database');};
+ for(const method of ['GET','POST'])assert.equal((await call({}, {method,env:{...env,VERCEL_ENV:'preview'},db:never})).status,503);
 });
