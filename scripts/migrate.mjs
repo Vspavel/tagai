@@ -1,6 +1,8 @@
 import { database } from '../server/db.mjs';
 import { schema } from '../server/schema.mjs';
-if (process.env.DATABASE_URL) {
+if (process.env.VERCEL_ENV === 'preview') {
+  console.log('Preview build: production data and migrations are disabled.');
+} else if (process.env.DATABASE_URL) {
   await database().transaction(schema);
   console.log('Database schema ready.');
 } else if (process.env.VERCEL) {
