@@ -1,91 +1,41 @@
-const data = JSON.parse(document.querySelector('#page-data').textContent);
-const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-if ('IntersectionObserver' in window && !reduceMotion) {
-  document.body.classList.add('js-ready');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => { if (entry.isIntersecting) {entry.target.classList.remove('pending');observer.unobserve(entry.target);} });
-  }, {rootMargin:'0px 0px 30px 0px',threshold:0.06});
-  document.querySelectorAll('.reveal').forEach(el=>{el.classList.add('pending');observer.observe(el);});
-}
-
-const tabs = [...document.querySelectorAll('[data-question]')];
-function selectQuestion(i,focus=false){
-  tabs.forEach((tab,n)=>{tab.setAttribute('aria-selected',String(n===i));tab.tabIndex=n===i?0:-1;});
-  document.querySelector('#answer').setAttribute('aria-labelledby','q-'+i);
-  document.querySelector('#answer p').textContent=data.answers[i];
-  if(focus)tabs[i].focus();
-}
-tabs.forEach((tab,i)=>{
-  tab.addEventListener('click',()=>selectQuestion(i));
-  tab.addEventListener('keydown',e=>{
-    let target;
-    if(e.key==='ArrowRight')target=(i+1)%tabs.length;
-    if(e.key==='ArrowLeft')target=(i+tabs.length-1)%tabs.length;
-    if(e.key==='Home')target=0;
-    if(e.key==='End')target=tabs.length-1;
-    if(target!==undefined){e.preventDefault();selectQuestion(target,true);}
-  });
-});
-
-const photoDialog=document.querySelector('#photo-dialog');
-document.querySelectorAll('[data-image]').forEach(button=>button.addEventListener('click',()=>{
-  const img=photoDialog.querySelector('img');img.src=button.dataset.image;img.alt=button.querySelector('img').alt;
-  photoDialog.querySelector('figcaption').textContent=button.dataset.caption;photoDialog.showModal();
-}));
-document.querySelectorAll('.privacy-button').forEach(button=>button.addEventListener('click',()=>document.querySelector('#privacy-dialog').showModal()));
-document.querySelectorAll('dialog').forEach(dialog=>{
-  dialog.querySelector('.dialog-close').addEventListener('click',()=>dialog.close());
-  dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
-});
-
-const form=document.querySelector('#waitlist-form'), message=document.querySelector('#form-message'), submit=document.querySelector('#submit');
-const retry=document.querySelector('#retry-form');
-let ready=false;
-async function getToken(){
-  const response=await fetch('/api/waitlist',{headers:{Accept:'application/json'},cache:'no-store',signal:AbortSignal.timeout(12000)});
-  if(!response.ok)throw new Error('unavailable');
-  const config=await response.json();
-  if(!config.ready||!config.token)throw new Error('unavailable');
-  return config.token;
-}
-async function initialize(){
-  retry.hidden=true;message.textContent=data.checking;
-  try{await getToken();ready=true;submit.disabled=false;message.textContent='';}
-  catch{ready=false;submit.disabled=true;message.textContent=data.unavailable;retry.hidden=false;}
-}
-retry.addEventListener('click',initialize);
-initialize();
-
-async function post(body){
-  body.token=await getToken();
-  const response=await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(20000)});
-  if(response.status===429)throw new Error('rate');
-  if(!response.ok)throw new Error('unavailable');
-  const result=await response.json();
-  if(!result.accepted)throw new Error('unavailable');
-}
-form.addEventListener('submit',async e=>{
-  e.preventDefault();if(!ready)return;
-  if(!form.reportValidity()){message.textContent=data.invalid;return;}
-  submit.disabled=true;submit.querySelector('span').textContent=data.pending;message.textContent='';
-  const query=new URLSearchParams(location.search);
-  try{
-    await post({kind:'waitlist',email:form.elements.email.value,city:form.elements.city.value,language:data.lang,consent:form.elements.consent.checked,website:form.elements.website.value,source:(query.get('utm_source')||'').slice(0,120),campaign:(query.get('utm_campaign')||'').slice(0,120)});
-    window.tagaiTrack?.('waitlist_submit_success');
-    form.reset();message.textContent=data.success;message.dataset.state='success';
-  }catch(error){window.tagaiTrack?.('waitlist_submit_error');message.textContent=error.message==='rate'?data.rate:data.error;message.dataset.state='error';}
-  finally{submit.disabled=false;submit.querySelector('span').textContent=data.join;}
-});
-
-const privacyForm=document.querySelector('#privacy-form');
-privacyForm.addEventListener('submit',async e=>{
-  e.preventDefault();const status=privacyForm.querySelector('[role=status]'),button=privacyForm.querySelector('[type=submit]');
-  if(!privacyForm.reportValidity()){status.textContent=data.invalid;return;}
-  button.disabled=true;button.textContent=data.pending;status.textContent='';
-  try{
-    await post({kind:'privacy',email:privacyForm.elements.email.value,requestType:privacyForm.elements.requestType.value,message:privacyForm.elements.message.value,website:privacyForm.elements.website.value,language:data.lang});
-    privacyForm.reset();status.textContent=data.received;status.dataset.state='success';
-  }catch(error){status.textContent=error.message==='rate'?data.rate:data.error;status.dataset.state='error';}
-  finally{button.disabled=false;button.textContent=data.send;}
-});
-
+export const forms = {
+  en: {
+    success: 'You’re on the list. We’ll contact you about early access. If you already joined, your existing registration is unchanged.',
+    privacyTitle: 'Privacy & your choices',
+    paragraphs: [
+      'TAGAI is a project operated by Pavel Shynkarenko in Limassol, Cyprus. Use the contact form below for questions about your personal data or to withdraw from the waitlist.',
+      'With your consent, we store your email address, optional city or region, language, signup time and consent version to manage the waitlist and contact you about early access. If present, campaign and referral labels are stored to understand how you found TAGAI. Registration does not verify ownership of an email address.',
+      'The site is hosted by Vercel. Waitlist data is stored in a Neon PostgreSQL database in Frankfurt, Germany. Service providers may process operational data in other countries under their applicable contractual safeguards; details can be requested below. We do not sell your details. If you allow analytics, Google Analytics 4 measures page views and waitlist form interactions using analytics cookies. It receives no email addresses or form contents. Advertising features are disabled. You can reject analytics or withdraw consent through Cookie settings; your choice is saved locally for 180 days. Google may process analytics data outside the EU under its applicable safeguards.',
+      'We retain waitlist details for up to 12 months from signup, unless you ask us to remove them sooner. Technical abuse-prevention records contain a rotating keyed hash of your network address and are removed within 48 hours. Hosting providers also process technical access logs under their own retention policies.',
+      'You can withdraw consent, request access, correction, erasure, restriction or portability, or object to processing. Withdrawal does not affect processing that occurred before it. You may complain to the Cyprus Commissioner for Personal Data Protection.',
+      'Requests sent below are stored for handling by the project operator and retained for up to 12 months. We may ask you to verify your email ownership before disclosing or changing records. Please do not include sensitive information. Updated 9 November 2026.'
+    ],
+    contact: 'Contact about my data', requestType: 'I would like to', types: ['Leave the waitlist','Access my data','Correct my data','Delete my data','Ask a question'], note: 'Message (optional)', send: 'Send request', received: 'Your request has been received for review. We may contact you to verify your email address.', retry: 'Try again', rate: 'Too many requests. Please try again in one hour.'
+  },
+  fr: {
+    success: 'Vous êtes sur la liste. Nous vous contacterons pour le premier accès. Si vous êtes déjà inscrit, votre inscription reste inchangée.',
+    privacyTitle: 'Confidentialité et vos choix',
+    paragraphs: [
+      'TAGAI est un projet exploité par Pavel Shynkarenko à Limassol, Chypre. Utilisez le formulaire ci-dessous pour toute question sur vos données ou pour quitter la liste d’attente.',
+      'Avec votre consentement, nous conservons votre adresse e-mail, votre ville ou région facultative, la langue, la date d’inscription et la version du consentement pour gérer la liste et vous contacter au sujet du premier accès. Les libellés de campagne et de provenance, s’ils sont présents, servent à comprendre comment vous avez découvert TAGAI. L’inscription ne vérifie pas que l’adresse e-mail vous appartient.',
+      'Le site est hébergé par Vercel. Les données de la liste sont stockées dans une base PostgreSQL Neon à Francfort, en Allemagne. Les prestataires peuvent traiter des données opérationnelles dans d’autres pays selon leurs garanties contractuelles applicables ; vous pouvez en demander les détails ci-dessous. Nous ne vendons pas vos données. Avec votre accord, Google Analytics 4 mesure les pages vues et les interactions avec la liste d’attente au moyen de cookies statistiques. Aucune adresse e-mail ni contenu de formulaire ne lui est envoyé. Les fonctions publicitaires sont désactivées. Vous pouvez refuser ou retirer votre accord dans les paramètres des cookies ; votre choix est conservé localement pendant 180 jours. Google peut traiter ces données hors de l’UE selon ses garanties applicables.',
+      'Les données sont conservées au maximum 12 mois après l’inscription, sauf demande de suppression anticipée. Les traces de protection contre les abus contiennent une empreinte cryptographique temporaire de l’adresse réseau, supprimée sous 48 heures. Les hébergeurs traitent également des journaux techniques selon leurs propres durées de conservation.',
+      'Vous pouvez retirer votre consentement, demander l’accès, la rectification, l’effacement, la limitation ou la portabilité, ou vous opposer au traitement. Le retrait ne remet pas en cause les traitements antérieurs. Vous pouvez déposer une réclamation auprès du Commissaire à la protection des données personnelles de Chypre.',
+      'Les demandes ci-dessous sont conservées pour traitement par le responsable du projet, pendant 12 mois au maximum. Une vérification de votre adresse peut être nécessaire avant la communication ou la modification de données. N’incluez pas d’informations sensibles. Mise à jour : 9 novembre 2026.'
+    ],
+    contact: 'Contacter le responsable', requestType: 'Je souhaite', types: ['Quitter la liste','Accéder à mes données','Corriger mes données','Supprimer mes données','Poser une question'], note: 'Message (facultatif)', send: 'Envoyer la demande', received: 'Votre demande a été reçue pour examen. Nous pourrons vous contacter pour vérifier votre adresse e-mail.', retry: 'Réessayer', rate: 'Trop de demandes. Veuillez réessayer dans une heure.'
+  },
+  el: {
+    success: 'Είστε στη λίστα. Θα επικοινωνήσουμε μαζί σας για την πρώτη πρόσβαση. Αν έχετε ήδη εγγραφεί, η εγγραφή σας παραμένει αμετάβλητη.',
+    privacyTitle: 'Απόρρητο και επιλογές',
+    paragraphs: [
+      'Το TAGAI είναι έργο που λειτουργεί από τον Pavel Shynkarenko στη Λεμεσό, Κύπρο. Χρησιμοποιήστε την παρακάτω φόρμα για ερωτήσεις σχετικά με τα δεδομένα σας ή για αποχώρηση από τη λίστα αναμονής.',
+      'Με τη συγκατάθεσή σας αποθηκεύουμε email, προαιρετική πόλη ή περιοχή, γλώσσα, χρόνο εγγραφής και έκδοση συγκατάθεσης, για τη διαχείριση της λίστας και την επικοινωνία για την πρώτη πρόσβαση. Εφόσον υπάρχουν, αποθηκεύονται ετικέτες καμπάνιας και προέλευσης για να κατανοήσουμε πώς βρήκατε το TAGAI. Η εγγραφή δεν επαληθεύει την κυριότητα του email.',
+      'Ο ιστότοπος φιλοξενείται στη Vercel. Τα δεδομένα αποθηκεύονται σε βάση PostgreSQL της Neon στη Φρανκφούρτη, Γερμανία. Οι πάροχοι ενδέχεται να επεξεργάζονται λειτουργικά δεδομένα σε άλλες χώρες βάσει των εφαρμοστέων συμβατικών εγγυήσεών τους· μπορείτε να ζητήσετε λεπτομέρειες παρακάτω. Δεν πωλούμε τα δεδομένα σας. Με τη συγκατάθεσή σας, το Google Analytics 4 μετρά προβολές σελίδων και ενέργειες στη φόρμα μέσω cookies στατιστικών. Δεν λαμβάνει email ή περιεχόμενο της φόρμας. Οι διαφημιστικές λειτουργίες είναι απενεργοποιημένες. Μπορείτε να αρνηθείτε ή να ανακαλέσετε τη συγκατάθεση στις ρυθμίσεις cookies· η επιλογή αποθηκεύεται τοπικά για 180 ημέρες. Η Google ενδέχεται να επεξεργάζεται τα δεδομένα εκτός ΕΕ βάσει των εφαρμοστέων εγγυήσεών της.',
+      'Τα στοιχεία διατηρούνται έως 12 μήνες από την εγγραφή, εκτός εάν ζητήσετε νωρίτερα τη διαγραφή τους. Τα αρχεία προστασίας από κατάχρηση περιέχουν προσωρινό κρυπτογραφικό αποτύπωμα της διεύθυνσης δικτύου και διαγράφονται εντός 48 ωρών. Οι πάροχοι φιλοξενίας τηρούν επίσης τεχνικά αρχεία πρόσβασης σύμφωνα με τις δικές τους πολιτικές.',
+      'Μπορείτε να ανακαλέσετε τη συγκατάθεση, να ζητήσετε πρόσβαση, διόρθωση, διαγραφή, περιορισμό ή φορητότητα, ή να αντιταχθείτε στην επεξεργασία. Η ανάκληση δεν επηρεάζει την προηγούμενη επεξεργασία. Μπορείτε να υποβάλετε καταγγελία στην Επίτροπο Προστασίας Δεδομένων Προσωπικού Χαρακτήρα της Κύπρου.',
+      'Τα αιτήματα παρακάτω αποθηκεύονται για εξέταση από τον υπεύθυνο του έργου, έως 12 μήνες. Ενδέχεται να ζητήσουμε επαλήθευση του email πριν από την κοινοποίηση ή αλλαγή δεδομένων. Μην περιλαμβάνετε ευαίσθητες πληροφορίες. Ενημέρωση: 9 Νοεμβρίου 2026.'
+    ],
+    contact: 'Επικοινωνία για τα δεδομένα μου', requestType: 'Θα ήθελα να', types: ['Αποχωρήσω από τη λίστα','Δω τα δεδομένα μου','Διορθώσω τα δεδομένα μου','Διαγράψω τα δεδομένα μου','Κάνω μια ερώτηση'], note: 'Μήνυμα (προαιρετικό)', send: 'Αποστολή αιτήματος', received: 'Το αίτημά σας παραλήφθηκε για εξέταση. Ενδέχεται να επικοινωνήσουμε για επαλήθευση του email σας.', retry: 'Νέα προσπάθεια', rate: 'Πάρα πολλά αιτήματα. Δοκιμάστε ξανά σε μία ώρα.'
+  }
+};
