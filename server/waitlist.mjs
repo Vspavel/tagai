@@ -10,6 +10,7 @@ export function createHandler({ db = database, env = process.env, clock = Date.n
     const send = (status, body) => res.status(status).json(body);
     res.setHeader('Cache-Control','no-store');
     res.setHeader('X-Content-Type-Options','nosniff');
+    if (env.VERCEL && env.VERCEL_ENV !== 'production') return send(503,{error:'unavailable'});
     if (!['GET','POST'].includes(req.method)) { res.setHeader('Allow','GET, POST'); return send(405,{error:'method'}); }
     if (!env.DATABASE_URL || !env.FORM_SECRET || env.FORM_SECRET.length < 32) return send(503,{error:'unavailable'});
     const address = clientAddress(req,env);
@@ -28,21 +29,24 @@ export function createHandler({ db = database, env = process.env, clock = Date.n
     let statement, values;
     if (body.kind === 'privacy') {
       if (!['withdraw','access','correct','delete','other'].includes(body.requestType) || typeof body.message !== 'string' || body.message.length > 1500) return send(400,{error:'invalid'});
+      if (!['app','visits','both'].includes(body.audience || 'app')) return send(400,{error:'invalid'});
+      if (body.requestId && !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.requestId)) return send(400,{error:'invalid'});
       statement = `WITH quota AS (${quota}), saved AS (
-        INSERT INTO privacy_requests(id,email,language,request_type,message)
-        SELECT $2,$3,$4,$5,$6 FROM quota WHERE hits <= 20 RETURNING id)
+        INSERT INTO privacy_requests(id,email,language,request_type,message,audience)
+        SELECT $2,$3,$4,$5,$6,$7 FROM quota WHERE hits <= 20 ON CONFLICT(id) DO NOTHING RETURNING id)
         SELECT hits <= 20 AS accepted FROM quota`;
-      values = [bucket,id,email,body.language,body.requestType,body.message];
+      values = [bucket,body.requestId || id,email,body.language,body.requestType,body.message,body.audience || 'app'];
     } else {
       if (body.kind && body.kind !== 'waitlist') return send(400,{error:'invalid'});
+      if (!['app','visits'].includes(body.audience || 'app')) return send(400,{error:'invalid'});
       if (body.consent !== true || !CITIES.includes(body.city ?? '')) return send(400,{error:'invalid'});
       for (const k of ['source','campaign']) if (body[k] !== undefined && (typeof body[k] !== 'string' || body[k].length > 120)) return send(400,{error:'invalid'});
       statement = `WITH quota AS (${quota}), saved AS (
-        INSERT INTO waitlist_signups(id,email,city,language,consent_version,source,campaign)
+        INSERT INTO ${body.audience === 'visits' ? 'visit_signups' : 'waitlist_signups'}(id,email,city,language,consent_version,source,campaign)
         SELECT $2,$3,$4,$5,$6,$7,$8 FROM quota WHERE hits <= 20
         ON CONFLICT(email) DO NOTHING RETURNING id)
         SELECT hits <= 20 AS accepted FROM quota`;
-      values = [bucket,id,email,body.city || '',body.language,CONSENT_VERSION,body.source || '',body.campaign || ''];
+      values = [bucket,id,email,body.city || '',body.language,body.audience === 'visits' ? '2026-11-09-visits-v1' : CONSENT_VERSION,body.source || '',body.campaign || ''];
     }
     try {
       const rows = await db().query(statement,values);
