@@ -71,8 +71,9 @@ form.addEventListener('submit',async e=>{
   const query=new URLSearchParams(location.search);
   try{
     await post({kind:'waitlist',email:form.elements.email.value,city:form.elements.city.value,language:data.lang,consent:form.elements.consent.checked,website:form.elements.website.value,source:(query.get('utm_source')||'').slice(0,120),campaign:(query.get('utm_campaign')||'').slice(0,120)});
+    window.tagaiTrack?.('waitlist_submit_success');
     form.reset();message.textContent=data.success;message.dataset.state='success';
-  }catch(error){message.textContent=error.message==='rate'?data.rate:data.error;message.dataset.state='error';}
+  }catch(error){window.tagaiTrack?.('waitlist_submit_error');message.textContent=error.message==='rate'?data.rate:data.error;message.dataset.state='error';}
   finally{submit.disabled=false;submit.querySelector('span').textContent=data.join;}
 });
 

@@ -1,4 +1,4 @@
-import { mkdir, writeFile, copyFile, cp, rm } from 'node:fs/promises';
+import { mkdir, writeFile, copyFile, cp, rm, access } from 'node:fs/promises';
 import { locales } from './src/locales.mjs';
 import { forms } from './src/forms.mjs';
 
@@ -7,18 +7,20 @@ const lines = a => a.map(x=>`<span>${esc(x)}</span>`).join('');
 const arrow = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg>';
 const cities = ['Cyprus','Paris','London','Dubai','Abu Dhabi','Doha','New York','Hong Kong'];
 const release = process.env.VERCEL_ENV !== 'preview';
+const ga4MeasurementId=release&&/^G-[A-Z0-9]+$/.test(process.env.GA4_MEASUREMENT_ID||'')?process.env.GA4_MEASUREMENT_ID:'';
+const analyticsText={en:{title:'Analytics, your choice',body:'With your permission, Google Analytics helps us understand visits and improve TAGAI. We do not send your email or form contents. You can change your choice at any time.',accept:'Allow analytics',reject:'Reject analytics',settings:'Cookie settings'},fr:{title:'L’analyse, à votre choix',body:'Avec votre accord, Google Analytics nous aide à comprendre les visites et à améliorer TAGAI. Nous ne transmettons ni votre email ni le contenu des formulaires. Vous pouvez modifier votre choix à tout moment.',accept:'Accepter les statistiques',reject:'Refuser les statistiques',settings:'Paramètres des cookies'},el:{title:'Η επιλογή για τα στατιστικά είναι δική σας',body:'Με τη συγκατάθεσή σας, το Google Analytics μάς βοηθά να κατανοούμε τις επισκέψεις και να βελτιώνουμε το TAGAI. Δεν στέλνουμε το email σας ή τα πεδία της φόρμας. Μπορείτε να αλλάξετε την επιλογή σας ανά πάσα στιγμή.',accept:'Αποδοχή στατιστικών',reject:'Απόρριψη στατιστικών',settings:'Ρυθμίσεις cookies'}};
 
 function page(lang,t){
 t={...t,...forms[lang]};
 const p={title:t.privacyTitle,paragraphs:t.paragraphs};
-const config = JSON.stringify({lang,registrationEnabled:true,...Object.fromEntries(['checking','unavailable','pending','success','error','invalid','join','close','rate','received','send','retry'].map(k=>[k,t[k]])),answers:t.answers}).replace(/</g,'\\u003c');
+const config = JSON.stringify({lang,ga4MeasurementId,registrationEnabled:true,...Object.fromEntries(['checking','unavailable','pending','success','error','invalid','join','close','rate','received','send','retry'].map(k=>[k,t[k]])),answers:t.answers}).replace(/</g,'\\u003c');
 return `<!doctype html>
 <html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#E4E5E3">
 <title>${esc(t.title)}</title><meta name="description" content="${esc(t.description)}">${release?'':'<meta name="robots" content="noindex,nofollow">'}
 <link rel="canonical" href="https://tagai.art/${lang}/">${Object.keys(locales).map(l=>`<link rel="alternate" hreflang="${l}" href="https://tagai.art/${l}/">`).join('')}<link rel="alternate" hreflang="x-default" href="https://tagai.art/en/">
 <meta property="og:type" content="website"><meta property="og:title" content="${esc(t.title)}"><meta property="og:description" content="${esc(t.description)}"><meta property="og:image" content="https://tagai.art/assets/encounter.webp"><meta property="og:url" content="https://tagai.art/${lang}/">
 <link rel="icon" type="image/svg+xml" href="/assets/symbol.svg"><link rel="preload" href="/assets/roboto-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/styles.css">
-<script id="page-data" type="application/json">${config}</script><script src="/app.js" defer></script>
+<script id="page-data" type="application/json">${config}</script><script src="/analytics.js" defer></script><script src="/app.js" defer></script>
 </head><body id="top"><a href="#main" class="skip">${esc(t.skip)}</a>
 <header class="header wrap"><a class="brand" href="/${lang}/" aria-label="TAGAI"><img src="/assets/logo.svg" width="140" height="40" alt="TAGAI"></a>
 <nav class="nav" aria-label="${lang==='fr'?'Navigation principale':lang==='el'?'Κύρια πλοήγηση':'Main navigation'}"><a href="#idea">${esc(t.nav[0])}</a><a href="#collection">${esc(t.nav[1])}</a><a href="#encounters">${esc(t.nav[2])}</a></nav>
@@ -47,7 +49,7 @@ return `<!doctype html>
 <form id="waitlist-form" class="waitlist-form" novalidate><div class="field"><label for="email">${esc(t.email)}</label><input id="email" name="email" type="email" autocomplete="email" placeholder="${esc(t.emailPlaceholder)}" maxlength="254" required></div><div class="field"><label for="city">${esc(t.city)} <span>(${esc(t.optional)})</span></label><select id="city" name="city"><option value="">${esc(t.cityPlaceholder)}</option>${cities.map((c,i)=>`<option value="${c}">${esc(t.places[i])}</option>`).join('')}<option value="Elsewhere">${esc(t.elsewhere)}</option></select></div><div class="honey" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div><label class="consent"><input id="consent" name="consent" type="checkbox" required><span>${esc(t.consent)} <button type="button" class="privacy-button">${esc(t.privacy)}</button></span></label><button type="submit" class="button light" id="submit" disabled><span>${esc(t.join)}</span>${arrow}</button><p class="form-message" id="form-message" role="status">${esc(t.checking)}</p><button type="button" id="retry-form" hidden>${esc(t.retry)}</button><noscript><p>Please enable JavaScript to submit the form.</p></noscript></form></div>
 <div class="places"><p class="micro">${esc(t.placesLabel)}</p><p>${t.places.map(x=>`<span>${esc(x)}</span>`).join('')}</p></div></div></section></main>
 
-<footer class="footer wrap"><div class="footer-top"><a href="/${lang}/" aria-label="TAGAI"><img src="/assets/logo.svg" width="140" height="40" alt="TAGAI"></a><p>${esc(t.footerLine)}</p><a href="#top" class="back-top">${esc(t.backTop)}<span aria-hidden="true">↑</span></a></div><div class="footer-bottom"><span>© 2026 TAGAI</span><button type="button" class="privacy-button">${esc(t.privacy)}</button><nav class="languages" aria-label="${esc(t.language)}">${['en','fr','el'].map(l=>`<a href="/${l}/" lang="${l}" ${l===lang?'aria-current="page"':''}>${l.toUpperCase()}</a>`).join('')}</nav></div></footer>
+<footer class="footer wrap"><div class="footer-top"><a href="/${lang}/" aria-label="TAGAI"><img src="/assets/logo.svg" width="140" height="40" alt="TAGAI"></a><p>${esc(t.footerLine)}</p><a href="#top" class="back-top">${esc(t.backTop)}<span aria-hidden="true">↑</span></a></div><div class="footer-bottom"><span>© 2026 TAGAI</span><button type="button" class="privacy-button">${esc(t.privacy)}</button><button type="button" class="analytics-settings" hidden>${esc(analyticsText[lang].settings)}</button><nav class="languages" aria-label="${esc(t.language)}">${['en','fr','el'].map(l=>`<a href="/${l}/" lang="${l}" ${l===lang?'aria-current="page"':''}>${l.toUpperCase()}</a>`).join('')}</nav></div></footer>
 <dialog id="photo-dialog" class="photo-dialog" aria-label="${esc(t.enlarge)}"><button class="dialog-close" aria-label="${esc(t.close)}">×</button><figure><img alt=""><figcaption></figcaption></figure></dialog>
 <dialog id="privacy-dialog" class="privacy-dialog" aria-labelledby="privacy-title"><button class="dialog-close" aria-label="${esc(t.close)}">×</button><p class="eyebrow">TAGAI</p><h2 id="privacy-title">${esc(p.title)}</h2>${p.paragraphs.map(x=>`<p>${esc(x)}</p>`).join('')}
 <h3>${esc(t.contact)}</h3><form id="privacy-form" novalidate>
@@ -56,13 +58,16 @@ return `<!doctype html>
 <label for="privacy-message">${esc(t.note)}</label><textarea id="privacy-message" name="message" rows="3" maxlength="1500"></textarea>
 <div class="honey" aria-hidden="true"><label for="privacy-website">Website</label><input id="privacy-website" name="website" tabindex="-1" autocomplete="off"></div>
 <button type="submit" class="button red">${esc(t.send)}</button><p role="status" class="form-message"></p></form></dialog>
+<aside id="analytics-consent" class="analytics-consent" aria-label="${esc(analyticsText[lang].title)}" hidden><div><strong>${esc(analyticsText[lang].title)}</strong><p>${esc(analyticsText[lang].body)}</p></div><div class="analytics-actions"><button type="button" data-analytics-choice="denied">${esc(analyticsText[lang].reject)}</button><button type="button" data-analytics-choice="granted">${esc(analyticsText[lang].accept)}</button></div></aside>
 </body></html>`;
 }
+for(const name of ['logo.svg','symbol.svg','encounter.webp','encounter-small.webp','founder.webp','looking.webp','memory-01.webp','memory-02.webp','memory-03.webp','studio.webp','studio-vertical.webp','inter-latin-400-normal.woff2','roboto-condensed-latin-700-normal.woff2']) await access('public/assets/'+name);
 await rm('dist',{recursive:true,force:true});
 await mkdir('dist',{recursive:true});
 await cp('public/assets','dist/assets',{recursive:true});
 for(const [lang,t] of Object.entries(locales)) {await mkdir(`dist/${lang}`,{recursive:true});await writeFile(`dist/${lang}/index.html`,page(lang,t));}
 await writeFile('dist/index.html',page('en',locales.en));
+await copyFile('src/analytics.js','dist/analytics.js');
 await copyFile('src/styles.css','dist/styles.css');await copyFile('src/app.js','dist/app.js');
 await writeFile('dist/robots.txt',release?'User-agent: *\nAllow: /\nSitemap: https://tagai.art/sitemap.xml\n':'User-agent: *\nDisallow: /\n');
 await writeFile('dist/sitemap.xml',`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${Object.keys(locales).map(l=>`<url><loc>https://tagai.art/${l}/</loc></url>`).join('')}</urlset>`);

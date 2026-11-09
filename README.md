@@ -1,6 +1,6 @@
 # TAGAI — tagai.art
 
-Production landing page in English, French and Greek, with a first-party waitlist API and PostgreSQL storage. No mailing-list SaaS, browser storage of subscriber data, or embedded tracking scripts.
+Production landing page in English, French and Greek, with a first-party waitlist API and PostgreSQL storage. Includes a separate protected admin project and optional consent-based GA4. Subscriber data stays in PostgreSQL; no mailing-list SaaS is used.
 
 ## Development
 
@@ -43,3 +43,21 @@ The API has same-origin checks, request-size limits, input validation, signed ad
 Photographs and TAGAI marks were supplied by the project owner for this website. They are not licensed for general reuse. Inter and Roboto Condensed are locally hosted under the included OFL licenses; no trial fonts are deployed.
 
 Only the landing page and waitlist are operational. Product descriptions refer to the planned March 2027 early access. Do not label studio participants or VIMA as confirmed commercial partners without an explicit agreement.
+
+## Private admin (v1.1)
+
+The `admin/` directory is a separate Vercel project, `tagai-admin`, with root directory `admin`. **Vercel Authentication → All Deployments is mandatory**, including production domains. Do not add bypass links, public aliases or protection exceptions. Project users with deployment access can read the panel. The application uses the existing team's Vercel identity rather than storing passwords.
+
+Set `ADMIN_PROJECT_ID` to the admin project's exact ID for Production and Preview. Set `ADMIN_ENABLED=1` and connect the existing waitlist database in **Production only**. The data API fails closed on the public project, on previews, or without database configuration. Preview builds can show the UI but cannot read subscriber data. This API is read-only and does not implement deletion or sending invitations. All responses are private/no-store; no tracking is installed in the admin app.
+
+The panel offers email search, city/language/date filters, 50-row pagination, statistics, pending privacy requests and filtered CSV export (10,000-row limit). Date filters and charts use Asia/Nicosia. Internal QA registrations are excluded unless explicitly selected. CSV cells are escaped against spreadsheet formulas. Counts reflect database registrations; they do not imply verified email ownership.
+
+## Google Analytics 4
+
+Set `GA4_MEASUREMENT_ID=G-...` in the **public site's Production build environment** and redeploy. Set `GA4_PROPERTY_ID` in the **admin project's Production environment** to link to the correct GA4 reports. Without the measurement ID, analytics and its consent banner remain inactive; no ID is fabricated. Preview deployments never load Google Analytics.
+
+Tracking only starts after explicit analytics consent (basic consent mode). Reject and accept have equal prominence. Consent can be withdrawn from Cookie settings and expires after 180 days. Ads storage, user data, personalization and Google Signals are disabled. The tag never receives email or form contents; page and referrer query strings are removed. UTM source, medium and campaign are restricted to short machine-readable labels. Do not put personal information in campaign names.
+
+Events: `page_view`, `waitlist_cta_click`, `waitlist_form_start`, `waitlist_submit_success`, `waitlist_submit_error`. Configure `waitlist_submit_success` as a GA4 key event and disable automatic enhanced form/page tracking to prevent duplicate events. Success means an accepted submission; it intentionally does not reveal whether the email already existed. Compare GA4 conversions with unique registrations in the admin panel. Visitors who decline analytics or use blockers will not appear in GA4.
+
+Validate consent rejection, acceptance, withdrawal, successful and failed submissions in GA4 DebugView/Realtime before calling the Google integration complete. Analytics account setup and data collection cannot be verified without a real GA4 property.
