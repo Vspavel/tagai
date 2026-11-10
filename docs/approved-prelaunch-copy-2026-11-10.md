@@ -38,7 +38,7 @@
 
 ## Первый экран
 
-**TAGAI — Your life with art.**
+**TAGAI — Your life with art**
 
 Your pocket art historian for the works that make you stop. Identify an artwork, explore its context, and keep it in a virtual collection you can return to.
 
@@ -90,7 +90,7 @@ Come back after the exhibition. Pick up a question, explore a new connection or 
 
 ## Коллекция и возвращение
 
-**The exhibition ends. Your life with the work continues.**
+**The exhibition ends — your life with the work continues**
 
 Your virtual collection will bring together artworks from different visits, with the places you encountered them and the thoughts you want to keep. Return to a work and continue exploring it over time.
 
@@ -123,7 +123,7 @@ In Sanya Kantarovsky’s *Reenactment*, Pavel recognised Narcissus. The conversa
 
 ## Основания доверять
 
-**Facts with sources. Room for your own reading.**
+**Facts with sources — room for your own reading**
 
 TAGAI is being built to distinguish documented information from interpretation. When an artwork cannot be identified reliably, it should say so. You will still be able to keep the work and explore what you see.
 
@@ -181,7 +181,7 @@ Booking is not open yet. You can receive visit announcements, or propose a visit
 
 ## Финальная подписка
 
-**Make room for your next encounter with art.**
+**Make room for your next encounter with art**
 
 Join the TAGAI waitlist for early access in March 2027.
 
@@ -279,11 +279,11 @@ A recognised story can open further questions about how the work is painted and 
 
 ## Предложение пилота
 
-**Help visitors spend more time with the art. See how they engage.**
+**Help visitors engage more deeply with contemporary art**
 
-TAGAI will create conversations and questions tailored to your exhibition or event, helping visitors explore the works on view.
+TAGAI will offer context on request and questions tailored to the works in your exhibition, helping each visitor look more closely and develop their own understanding.
 
-The pilot will include an artwork-level report showing how many TAGAI participants photographed each work and how much time they spent interacting with it through TAGAI.
+The pilot will combine these conversations with an artwork-level report on participation and recorded interaction. These figures will support your evaluation of the visitor experience.
 
 **Button:** Discuss a pilot
 
@@ -291,9 +291,9 @@ The pilot will include an artwork-level report showing how many TAGAI participan
 
 ## Опыт посетителя
 
-**A conversation shaped for your event**
+**Context on request, questions that open up the work**
 
-A visitor photographs a work and starts with a question or a prompt prepared for your exhibition. TAGAI brings relevant information into the conversation and helps the visitor examine what they notice.
+A visitor photographs a work and starts with what catches their attention. They can ask for context and explore questions prepared for your exhibition. TAGAI will guide attention to details, relationships and possible interpretations, leaving room for the visitor’s own response.
 
 The visitor can keep the work in a virtual collection and return to it after the event.
 
@@ -311,9 +311,9 @@ Together with your team, we will agree the works, source materials, questions an
 | Total interaction time | The total recorded time spent interacting with that work through TAGAI |
 | Share of interaction time | The work’s share of recorded interaction time across the event’s included works |
 
-**Understand both reach and depth**
+**Read the signals in context**
 
-The report will help you compare which works participants photographed and where they spent time in TAGAI. Time is a signal of engagement; it does not establish whether a visitor liked a work or understood it.
+The report will help you compare which works participants photographed and how they interacted with them through TAGAI. Time describes recorded activity; it does not measure the quality of an encounter, understanding or enjoyment.
 
 **Scope of the report**
 
@@ -325,13 +325,13 @@ Reports will cover participating TAGAI users and the agreed artworks and period.
 
 **Build the pilot around your exhibition**
 
-1. **Choose the scope.** Agree the event, artworks, dates and questions you want the pilot to address.
+1. **Choose the scope** Agree the event, artworks, dates and questions you want the pilot to address.
 
-2. **Prepare the conversations.** Develop questions and supporting context using agreed materials and sources.
+2. **Prepare the conversations** Develop questions and supporting context using agreed materials and sources.
 
-3. **Invite visitors.** Agree how visitors will discover and use TAGAI during the event.
+3. **Invite visitors** Agree how visitors will discover and use TAGAI during the event.
 
-4. **Review the report.** Examine the recorded engagement by artwork, with the scope and method made clear.
+4. **Review the report** Examine the recorded engagement by artwork, with the scope and method made clear.
 
 **Pilot scope, preparation and commercial terms will be agreed for each event.**
 

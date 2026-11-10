@@ -40,7 +40,7 @@ function source(lang){
 const all=Object.fromEntries(['en','fr','el'].map(l=>[l,source(l)]));
 const structure={site:['shared',''],home:['app',''],partners:['partners','partners'],visits:['visits','visits'],'sarah-awad':['encounter','encounters/sarah-awad'],'sanya-kantarovsky':['encounter','encounters/sanya-kantarovsky'],updates:['updates','updates'],'launch-update':['article','updates/tagai-march-2027'],manage:['manage','manage']};
 const documents=Object.entries(structure).map(([id,[kind,slug]])=>{
- const en=flatten(all.en[id]);return {id,kind,slug,indexable:!['site','manage'].includes(id),enabled:!['updates','launch-update'].includes(id),schemaVersion:2,baselineRevision:'2026-11-10-approved',previousSourceHash:previous[id]||null,source:en,translations:Object.fromEntries(['fr','el'].map(l=>[l,{fields:flatten(all[l][id]),sourceFields:en,provider:'editorial-ai',reviewed:false,locked:[]}]))};
+ const en=flatten(all.en[id]);return {id,kind,slug,indexable:!['site','manage'].includes(id),enabled:!['updates','launch-update'].includes(id),schemaVersion:2,baselineRevision:['home','partners'].includes(id)?'2026-11-10-depth':'2026-11-10-approved',previousSourceHash:previous[id]||null,source:en,translations:Object.fromEntries(['fr','el'].map(l=>[l,{fields:flatten(all[l][id]),sourceFields:en,provider:'editorial-ai',reviewed:false,locked:[]}]))};
 });
 await writeFile('admin/server/content-seed.json',JSON.stringify(documents,null,2)+'\n');
 console.log('Prepared approved content: '+documents.length+' documents, EN / FR / EL.');
