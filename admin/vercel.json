@@ -7,18 +7,8 @@
   "cleanUrls": true,
   "functions": {
     "api/*.js": {
-      "maxDuration": 30
-    },
-    "api/content.js": {
       "maxDuration": 120,
       "includeFiles": "server/content-seed.json"
-    },
-    "api/search.js": {
-      "maxDuration": 120,
-      "includeFiles": "server/content-seed.json"
-    },
-    "api/content-worker.js": {
-      "maxDuration": 120
     }
   },
   "headers": [
