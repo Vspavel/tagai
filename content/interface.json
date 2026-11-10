@@ -196,7 +196,12 @@
     "yearly": "A few times a year",
     "rarely": "Less often",
     "skipQuestion": "Skip",
-    "answerSaved": "Your answer has been saved."
+    "answerSaved": "Your answer has been saved.",
+    "cityNames": {
+      "Nicosia": "Nicosia",
+      "Limassol": "Limassol",
+      "Paris": "Paris"
+    }
   },
   "fr": {
     "skip": "Aller au contenu",
@@ -395,7 +400,12 @@
     "yearly": "Quelques fois par an",
     "rarely": "Moins souvent",
     "skipQuestion": "Passer",
-    "answerSaved": "Votre réponse a été enregistrée."
+    "answerSaved": "Votre réponse a été enregistrée.",
+    "cityNames": {
+      "Nicosia": "Nicosie",
+      "Limassol": "Limassol",
+      "Paris": "Paris"
+    }
   },
   "el": {
     "skip": "Μετάβαση στο περιεχόμενο",
@@ -594,6 +604,11 @@
     "yearly": "Μερικές φορές τον χρόνο",
     "rarely": "Σπανιότερα",
     "skipQuestion": "Παράλειψη",
-    "answerSaved": "Η απάντησή σας αποθηκεύτηκε."
+    "answerSaved": "Η απάντησή σας αποθηκεύτηκε.",
+    "cityNames": {
+      "Nicosia": "Λευκωσία",
+      "Limassol": "Λεμεσός",
+      "Paris": "Παρίσι"
+    }
   }
 }
