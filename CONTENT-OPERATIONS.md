@@ -4,7 +4,7 @@
 
 English source and translations are versioned in cms_documents/cms_revisions. PostgreSQL tables are logically separated from signup data; they currently use the existing protected admin database connection (not a separate least-privilege database role). Only protected production admin routes can access CMS. Public runtime does not query drafts.
 
-The repository seed preserves the three existing published languages. Four additional languages are supported by API/database/editor, but are not advertised on the public site until all seven translations pass validation and a release is approved. Do not publish English placeholders as translations.
+The repository baseline publishes all seven languages: English, French, Greek, Spanish, Italian, German and Russian. The build validates every translation before publishing. Translations include stories, forms and privacy notices. Do not publish English placeholders as translations. The same baseline seeds the admin editor without overwriting edited English sources.
 
 An editor save creates durable translation jobs. The browser processes them immediately when a provider is configured; the authenticated Vercel cron worker also processes one queued job per invocation. Provider failures are recorded. Manual translation changes lock the affected translation fields; source changes require manual review of those locked fields. Limits: 50 translation jobs and 10 AI observations per UTC database day. Each translation job can call a primary and fallback provider; these are request-count limits, not a guaranteed currency budget. Set provider-side spending limits as well.
 
