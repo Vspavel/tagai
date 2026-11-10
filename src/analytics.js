@@ -26,7 +26,7 @@
   document.querySelectorAll('[data-analytics-choice]').forEach(el=>el.addEventListener('click',()=>save(el.dataset.analyticsChoice)));
   document.querySelectorAll('.analytics-settings').forEach(el=>{el.hidden=false;el.addEventListener('click',()=>{banner.hidden=false;banner.querySelector('button').focus();});});
   if(choice==='granted')start();else if(choice!=='denied')banner.hidden=false;
-  const allowed=new Set(['waitlist_cta_click','waitlist_form_start','waitlist_submit_success','waitlist_submit_error']);
+  const allowed=new Set(['waitlist_cta_click','waitlist_form_start','waitlist_submit_success','waitlist_submit_error','enquiry_submit_success']);
   // Accepted submissions include duplicates; unique active registrations come from the database.
   window.tagaiTrack=(event)=>{if(active&&allowed.has(event))gtag('event',event,{language:config.lang,signup_audience:config.audience==='visits'?'visits':'app'});};
   document.querySelectorAll('a[href="#waitlist"]').forEach(el=>el.addEventListener('click',()=>window.tagaiTrack('waitlist_cta_click')));
