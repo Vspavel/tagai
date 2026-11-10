@@ -32,7 +32,7 @@ test('duplicate cannot overwrite original language, city, source or consent date
 });
 test('rejects invalid consent, language, city, emails, honeypot and forged token before DB',async()=>{
   const never=()=>{throw new Error('Database should not be reached');};
-  for(const body of [{consent:false},{consent:'true'},{language:'ru'},{city:'<script>'},{email:'x@y'},{email:'a@b@c.com'},{website:'spam'},{token:'forged'}]) assert.equal((await call(body,{db:never})).status,400);
+  for(const body of [{consent:false},{consent:'true'},{language:'xx'},{city:'<script>'},{email:'x@y'},{email:'a@b@c.com'},{website:'spam'},{token:'forged'}]) assert.equal((await call(body,{db:never})).status,400);
 });
 test('strict same-origin, JSON, method and body limits',async()=>{
   assert.equal((await call({}, {headers:{origin:'https://evil.example'}})).status,403);
@@ -93,4 +93,8 @@ test('retrying the same privacy request does not duplicate the queue',async()=>{
 test('preview deployments cannot access production data or accept signups',async()=>{
  const never=()=>{throw new Error('Preview must not reach database');};
  for(const method of ['GET','POST'])assert.equal((await call({}, {method,env:{...env,VERCEL_ENV:'preview'},db:never})).status,503);
+});
+
+test('new languages are accepted in both database lists',async()=>{
+ for(const language of ['es','it','de','ru'])for(const audience of ['app','visits']){const r=await call({email:`locale-${language}-${audience}@example.com`,language,audience});assert.equal(r.status,200);}
 });
