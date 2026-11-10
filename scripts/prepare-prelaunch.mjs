@@ -1,9 +1,11 @@
 // Rebuild the approved EN baseline and reviewed static translations. Runtime edits use the CMS.
 import {readFile,writeFile} from 'node:fs/promises';
-import {hash} from '../admin/server/content-model.mjs';
+import {LANGUAGES,validateTranslation} from '../admin/server/content-model.mjs';
 const blocks=JSON.parse(await readFile('docs/approved-prelaunch-blocks.json','utf8'));
 const previous=JSON.parse(await readFile('content/previous-source.json','utf8'));
 const translations=JSON.parse(await readFile('content/prelaunch-translations.json','utf8'));
+const hero=JSON.parse(await readFile('content/hero.json','utf8'));
+const interfaceKeys=JSON.parse(await readFile('content/interface-keys.json','utf8'));
 const ui=JSON.parse(await readFile('content/interface.json','utf8'));
 const flatten=(o,p='',r={})=>{for(const[k,v]of Object.entries(o)){const key=p?p+'.'+k:k;if(v&&typeof v==='object')flatten(v,key,r);else r[key]=String(v);}return r;};
 function source(lang){
@@ -39,8 +41,19 @@ function source(lang){
 }
 const all=Object.fromEntries(['en','fr','el'].map(l=>[l,source(l)]));
 const structure={site:['shared',''],home:['app',''],partners:['partners','partners'],visits:['visits','visits'],'sarah-awad':['encounter','encounters/sarah-awad'],'sanya-kantarovsky':['encounter','encounters/sanya-kantarovsky'],updates:['updates','updates'],'launch-update':['article','updates/tagai-march-2027'],manage:['manage','manage']};
+for(const l of ['en','fr','el']){
+ all[l].home.heading=hero[l][0];all[l].home.intro=hero[l][1];
+ all[l].site=Object.fromEntries(Object.entries(flatten(all[l].site)).filter(([k])=>interfaceKeys.includes(k.split('.')[0])));
+}
+const additional=Object.fromEntries(await Promise.all(['es','it','de','ru'].map(async l=>[l,JSON.parse(await readFile('content/translation-'+l+'.json','utf8'))])));
 const documents=Object.entries(structure).map(([id,[kind,slug]])=>{
- const en=flatten(all.en[id]);return {id,kind,slug,indexable:!['site','manage'].includes(id),enabled:!['updates','launch-update'].includes(id),schemaVersion:2,baselineRevision:['home','partners'].includes(id)?'2026-11-10-depth':'2026-11-10-approved',previousSourceHash:previous[id]||null,source:en,translations:Object.fromEntries(['fr','el'].map(l=>[l,{fields:flatten(all[l][id]),sourceFields:en,provider:'editorial-ai',reviewed:false,locked:[]}]))};
+ const en=flatten(all.en[id]);
+ const localized=Object.fromEntries(LANGUAGES.slice(1).map(l=>{
+  const fields=additional[l]?.[id]||flatten(all[l][id]);
+  validateTranslation(en,fields);
+  return [l,{fields,sourceFields:en,provider:'editorial-ai',reviewed:false,locked:[]}];
+ }));
+ return {id,kind,slug,indexable:!['site','manage'].includes(id),enabled:!['updates','launch-update'].includes(id),schemaVersion:2,baselineRevision:'2026-11-10-seven-languages',previousSourceHash:previous[id]||null,source:en,translations:localized};
 });
 await writeFile('admin/server/content-seed.json',JSON.stringify(documents,null,2)+'\n');
-console.log('Prepared approved content: '+documents.length+' documents, EN / FR / EL.');
+console.log('Prepared content: '+documents.length+' documents × '+LANGUAGES.join('/'));
