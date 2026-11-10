@@ -38,7 +38,7 @@ The API has same-origin checks, request-size limits, input validation, signed ad
 
 ## Source and assets
 
-`src/locales.mjs` contains editorial translations; `src/forms.mjs` contains privacy text and `src/flow.mjs` contains the separate signup flows and collection demonstration. `build.mjs` generates `/en/`, `/fr/`, `/el/` and the English root, plus localized `/visits/` and `/manage/` pages. No front-end framework is needed for this landing page.
+English content and six translations are edited in the protected admin at `/content.html`. Versioned CMS records produce immutable approved releases. `admin/server/content-seed.json` preserves the original EN/FR/EL baseline until the first CMS publication. `build.mjs` renders only release snapshots, never drafts. New pages use the article template. See [content operations](CONTENT-OPERATIONS.md) for activation, provider limits, publication and rollback. Legacy `src/locales.mjs`, `src/forms.mjs` and `src/flow.mjs` are retained for reference; they are no longer the build source.
 
 Photographs and TAGAI marks were supplied by the project owner for this website. They are not licensed for general reuse. Inter and Roboto Condensed are locally hosted under the included OFL licenses; no trial fonts are deployed.
 

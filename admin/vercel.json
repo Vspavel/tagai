@@ -1,9 +1,47 @@
 {
-  "buildCommand":"npm run build","outputDirectory":"dist","regions":["fra1"],"cleanUrls":true,
-  "functions":{"api/*.js":{"maxDuration":30}},
-  "headers":[{"source":"/(.*)","headers":[
-    {"key":"Cache-Control","value":"private, no-store"},{"key":"X-Robots-Tag","value":"noindex, nofollow"},
-    {"key":"X-Content-Type-Options","value":"nosniff"},{"key":"Referrer-Policy","value":"no-referrer"},
-    {"key":"Content-Security-Policy","value":"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'"}
-  ]}]
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "regions": [
+    "fra1"
+  ],
+  "cleanUrls": true,
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 120,
+      "includeFiles": "server/content-seed.json"
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'"
+        }
+      ]
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/content-worker",
+      "schedule": "* * * * *"
+    }
+  ]
 }

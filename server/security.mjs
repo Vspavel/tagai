@@ -2,7 +2,8 @@ import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { domainToASCII } from 'node:url';
 export const CONSENT_VERSION = '2026-11-09-v1';
 export const CITIES = ['', 'Cyprus','Paris','London','Dubai','Abu Dhabi','Doha','New York','Hong Kong','Elsewhere'];
-export const LANGUAGES = ['en','fr','el'];
+import {LANGUAGES} from '../admin/server/content-model.mjs';
+export {LANGUAGES};
 const mac = (value, secret) => createHmac('sha256', secret).update(value).digest('base64url');
 export function safeEqual(a, b) {
   const x = Buffer.from(a || ''), y = Buffer.from(b || '');

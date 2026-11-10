@@ -1,7 +1,7 @@
 export const schema = [
   `CREATE TABLE IF NOT EXISTS waitlist_signups (
     id uuid PRIMARY KEY, email text NOT NULL UNIQUE CHECK (email = lower(email)),
-    city text NOT NULL DEFAULT '', language text NOT NULL CHECK (language IN ('en','fr','el')),
+    city text NOT NULL DEFAULT '', language text NOT NULL CHECK (language IN ('en','fr','el','es','it','de','ru')),
     consent_version text NOT NULL, consent_at timestamptz NOT NULL DEFAULT now(),
     created_at timestamptz NOT NULL DEFAULT now(), expires_at timestamptz NOT NULL DEFAULT now() + interval '12 months',
     email_verified boolean NOT NULL DEFAULT false,
@@ -37,4 +37,9 @@ schema.push(
     action text NOT NULL, note text NOT NULL DEFAULT '', owner_verified boolean NOT NULL DEFAULT false,
     created_at timestamptz NOT NULL DEFAULT now()
   )`
+ );
+schema.push(
+`DO $$ DECLARE tab text; c record; BEGIN FOREACH tab IN ARRAY ARRAY['waitlist_signups','visit_signups'] LOOP
+FOR c IN SELECT conname FROM pg_constraint WHERE conrelid=tab::regclass AND contype='c' AND pg_get_constraintdef(oid) LIKE '%language%' LOOP EXECUTE format('ALTER TABLE %I DROP CONSTRAINT %I',tab,c.conname); END LOOP;
+EXECUTE format('ALTER TABLE %I ADD CONSTRAINT %I CHECK(language IN (''en'',''fr'',''el'',''es'',''it'',''de'',''ru''))',tab,tab||'_language_check'); END LOOP; END $$`
 );
