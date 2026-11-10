@@ -7,7 +7,17 @@ import {translate} from './translator.mjs';
 import {enqueue,workOne,budget} from './translation-jobs.mjs';
 import {oauthReady,oauthStart,oauthCallback,searchReport,observeAI} from './search-services.mjs';
 export const readSeed=async()=>JSON.parse(await readFile(new URL('./content-seed.json',import.meta.url),'utf8'));
-export async function seedContent(query){for(const d of await readSeed())await query('INSERT INTO cms_documents(id,document) VALUES($1,$2::jsonb) ON CONFLICT DO NOTHING',[d.id,JSON.stringify(d)]);}
+export async function seedContent(query){
+ for(const d of await readSeed()){
+  const inserted=await query('INSERT INTO cms_documents(id,document) VALUES($1,$2::jsonb) ON CONFLICT DO NOTHING RETURNING id',[d.id,JSON.stringify(d)]);
+  if(inserted.length)continue;
+  const r=(await query('SELECT version,document FROM cms_documents WHERE id=$1',[d.id]))[0];
+  if(!r||r.document.baselineRevision===d.baselineRevision||!d.previousSourceHash)continue;
+  // Upgrade only the untouched previous baseline. Archive it before changing the draft.
+  if(hash(r.document.source)!==d.previousSourceHash)continue;
+  await query(`WITH changed AS (UPDATE cms_documents SET document=$4::jsonb,version=version+1,updated_at=now() WHERE id=$1 AND version=$2 RETURNING *) , archived AS (INSERT INTO cms_revisions(document_id,version,document) SELECT id,$2,$3::jsonb FROM changed ON CONFLICT DO NOTHING) INSERT INTO cms_revisions(document_id,version,document) SELECT id,version,document FROM changed`,[d.id,r.version,JSON.stringify(r.document),JSON.stringify(d)]);
+ }
+}
 export async function saveDoc(query,doc,version){validateDocument(doc);const rows=await query(`WITH changed AS (UPDATE cms_documents SET document=$3::jsonb,version=version+1,updated_at=now() WHERE id=$1 AND version=$2 RETURNING *) INSERT INTO cms_revisions(document_id,version,document) SELECT id,version,document FROM changed RETURNING version`,[doc.id,version,JSON.stringify(doc)]);if(!rows.length)throw Error('conflict');return rows[0].version;}
 const UUID=/^[0-9a-f]{8}-[0-9a-f-]{27}$/i;
 const publicURL=(doc,lang)=>'https://tagai.art/'+lang+'/'+(doc.slug?doc.slug+'/':'');
@@ -35,8 +45,8 @@ export function createContentHandler({env=process.env,query=databaseQuery(env),f
  let b;try{b=JSON.parse(raw);}catch{return send(400,{error:'invalid'});}
  if(b.action==='oauth')return send(200,{url:await oauthStart(query,env,res)});
  if(b.action==='create'){
- const d={id:b.slug,slug:b.slug,kind:'article',indexable:true,source:{title:b.title,description:b.description,heading:b.title,body:b.body},translations:{}};validateDocument(d);
- if(['site','home','app','visits','manage','api','assets','content-release','robots','sitemap'].includes(d.id))throw Error('slug');
+ const d={id:b.slug,slug:b.slug,kind:'article',indexable:true,enabled:false,schemaVersion:2,source:{title:b.title,description:b.description,heading:b.title,body:b.body},translations:{}};validateDocument(d);
+ if(['site','home','app','visits','partners','updates','encounters','manage','api','assets','content-release','robots','sitemap'].includes(d.id))throw Error('slug');
  await query('INSERT INTO cms_documents(id,document) VALUES($1,$2::jsonb)',[d.id,JSON.stringify(d)]);await enqueue(query,d);return send(201,{id:d.id});
  }
  if(['publish','rollback','retry_release'].includes(b.action)){
@@ -58,7 +68,7 @@ export function createContentHandler({env=process.env,query=databaseQuery(env),f
  const row=(await query('SELECT version,document FROM cms_documents WHERE id=$1',[b.id]))[0];if(!row)throw Error('not_found');const doc=row.document;
  if(['save','translate','override'].includes(b.action)&&row.version!==b.version)throw Error('conflict');
  if(b.action==='save'){
- validateFields(b.source,doc.source);doc.source=b.source;if(typeof b.indexable==='boolean'&&doc.kind!=='manage'&&doc.kind!=='shared')doc.indexable=b.indexable;
+ validateFields(b.source,doc.source);doc.source=b.source;if(typeof b.enabled==='boolean'&&['article','updates'].includes(doc.kind)){if(b.enabled&&['updates','launch-update'].includes(doc.id)&&Date.now()<Date.parse('2026-12-01T00:00:00Z'))throw Error('scheduled_draft');doc.enabled=b.enabled;}if(typeof b.indexable==='boolean'&&doc.kind!=='manage'&&doc.kind!=='shared')doc.indexable=b.indexable;
  const version=await saveDoc(query,doc,b.version);await enqueue(query,doc);return send(200,{version});
  }
  if(b.action==='override'){
@@ -84,5 +94,5 @@ export function createContentHandler({env=process.env,query=databaseQuery(env),f
  try{const report=await observeAI(b.prompt,env,fetcher);await query('UPDATE cms_reports SET report=$2::jsonb WHERE id=$1',[slots[0].id,JSON.stringify({...report,status:'done'})]);return send(200,{report});}catch(e){await query('UPDATE cms_reports SET report=$2::jsonb WHERE id=$1',[slots[0].id,JSON.stringify({status:'failed',prompt:b.prompt,error:'monitor_failed'})]);throw e;}
  }
  throw Error('invalid');
- }catch(e){const allowed=['conflict','fields','invalid','not_found','slug','not_ready','translation_not_configured','translation_failed','translation_literals','locked_translation','daily_limit','publish_not_configured','oauth_not_configured','oauth_state','oauth_failed','gsc_not_connected','gsc_reconnect','gsc_property','gsc_access','monitor_not_configured','monitor_failed'];const code=e.code==='23505'?'conflict':allowed.includes(e.message)?e.message:'service_unavailable';return send(code==='conflict'?409:code==='service_unavailable'?503:400,{error:code});}
+ }catch(e){const allowed=['scheduled_draft','conflict','fields','invalid','not_found','slug','not_ready','translation_not_configured','translation_failed','translation_literals','locked_translation','daily_limit','publish_not_configured','oauth_not_configured','oauth_state','oauth_failed','gsc_not_connected','gsc_reconnect','gsc_property','gsc_access','monitor_not_configured','monitor_failed'];const code=e.code==='23505'?'conflict':allowed.includes(e.message)?e.message:'service_unavailable';return send(code==='conflict'?409:code==='service_unavailable'?503:400,{error:code});}
 };}

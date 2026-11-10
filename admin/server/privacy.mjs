@@ -25,8 +25,8 @@ export function createPrivacyHandler({env=process.env,query}={}){
       if(prior.length)return res.status(200).json({ok:true,action:prior[0].action});
       const allowed=b.action==='withdraw'?"AND request_type='withdraw'":b.action==='delete'?"AND request_type='delete'":b.action==='complete'?"AND request_type IN ('access','correct','other')":'';
       const destructive=b.action==='withdraw'||b.action==='delete';
-      const mutations=destructive?['app','visits'].map((audience,i)=>{
-        const table=audience==='app'?'waitlist_signups':'visit_signups';
+      const mutations=destructive?['app','visits','updates'].map((audience,i)=>{
+        const table=audience==='app'?'waitlist_signups':audience==='visits'?'visit_signups':'update_signups';
         const match=`email IN (SELECT email FROM changed WHERE audience IN ('${audience}','both'))`;
         return `m${i} AS (${b.action==='delete'?`DELETE FROM ${table} WHERE ${match}`:`UPDATE ${table} SET status='withdrawn',withdrawn_at=COALESCE(withdrawn_at,now()) WHERE ${match}`} RETURNING id)`;
       }).join(',')+',':'';
