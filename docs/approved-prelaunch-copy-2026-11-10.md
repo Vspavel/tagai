@@ -700,3 +700,12 @@ You can reply to this email with any corrections or additional information.
 - [Istituto Veneto — Basic Failure](https://www.istitutoveneto.it/evento/sanya-kantarovsky-basic-failure/).
 
 Публичные сведения о произведениях проверены по каталогам галерей и организатора выставки. Место и обстоятельства личных встреч сообщены Павлом; посещение Венеции 7 мая 2026 года также соответствует данным его фотографии. Эти источники не служат подтверждением готовности приложения или результатов пилота 2027 года.
+
+
+## Homepage revision — 10 November 2026
+
+Headline: Your life with art
+
+Subheading: Explore art. Build virtual collections. Share your vision
+
+Remove the repeated tagline from the footer. Publish English, French, Greek, Spanish, Italian, German and Russian, with native language names in the selector.
