@@ -7,5 +7,5 @@ export async function contentSnapshot(){
  if(rows.length&&rows[0].snapshot.schemaVersion===2){releaseSnapshot(rows[0].snapshot.documents);return {releaseId:rows[0].id,...rows[0].snapshot};}
  }
  const documents=JSON.parse(await readFile(new URL('../admin/server/content-seed.json',import.meta.url),'utf8'));
- return {schemaVersion:2,releaseId:'repository-baseline',languages:['en','fr','el'],documents};
+ return {releaseId:'repository-baseline',...releaseSnapshot(documents)};
 }

@@ -56,3 +56,20 @@ const match=location.hash.match(/^#token=([A-Za-z0-9_-]{43})$/);let accessToken=
  $('#frequency-form').onsubmit=async e=>{e.preventDefault();const f=e.target,b=$('button',f);b.disabled=true;try{await call({action:'frequency',frequency:f.elements.frequency.value});$('[role=status]',f).textContent=u.answerSaved;}catch(err){$('[role=status]',f).textContent=err.message;}finally{b.disabled=false;}};
  $('#skip-frequency').onclick=()=>$('#frequency-form').hidden=true;
 }}
+
+// A language list is navigation: native links, one open list, and predictable dismissal.
+const languagePickers=[...document.querySelectorAll('.language-picker')];
+for(const picker of languagePickers){
+ const summary=picker.querySelector('summary');
+ picker.addEventListener('toggle',()=>{if(picker.open)for(const other of languagePickers)if(other!==picker)other.open=false;});
+ picker.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&picker.open){e.preventDefault();picker.open=false;summary.focus();}
+  if(['ArrowDown','ArrowUp','Home','End'].includes(e.key)){
+   e.preventDefault();picker.open=true;const links=[...picker.querySelectorAll('a')],i=links.indexOf(document.activeElement);
+   const next=e.key==='Home'?0:e.key==='End'?links.length-1:e.key==='ArrowDown'?(i+1)%links.length:(i<0?links.length-1:(i-1+links.length)%links.length);
+   links[next].focus();
+  }
+ });
+ picker.addEventListener('focusout',e=>{if(e.relatedTarget&&!picker.contains(e.relatedTarget))picker.open=false;});
+}
+document.addEventListener('click',e=>{for(const picker of languagePickers)if(!picker.contains(e.target))picker.open=false;});
