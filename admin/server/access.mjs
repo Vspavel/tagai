@@ -15,7 +15,7 @@ export function csrf(req,res,env){
 export function validMutation(req,env){
   const origins=new Set(['https://tagai-admin-vspa.vercel.app']);
   for(const host of [env.VERCEL_URL,env.VERCEL_PROJECT_PRODUCTION_URL])if(host)origins.add('https://'+host);
-  if(env.LOCAL_ADMIN_TEST==='1')for(const host of ['localhost','terminal.local'])origins.add(`http://${host}:${env.DEV_PORT||4174}`);
+  if(env.LOCAL_ADMIN_TEST==='1')for(const host of ['localhost','terminal.local','127.0.0.1'])origins.add(`http://${host}:${env.DEV_PORT||4174}`);
   if(!origins.has(req.headers.origin)||!/^application\/json(?:;|$)/i.test(req.headers['content-type']||''))return false;
   const a=cookie(req,env)||'',b=req.headers['x-csrf-token']||'';
   return /^[a-f0-9]{64}$/.test(a)&&typeof b==='string'&&a.length===b.length&&timingSafeEqual(Buffer.from(a),Buffer.from(b));

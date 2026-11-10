@@ -1,3 +1,4 @@
+import {LANGUAGES} from './content-model.mjs';
 import { guard, databaseQuery } from './access.mjs';
 const CITIES=['Cyprus','Paris','London','Dubai','Abu Dhabi','Doha','New York','Hong Kong','Elsewhere'];
 const records=`(SELECT *, 'app'::text AS audience FROM waitlist_signups UNION ALL SELECT *, 'visits'::text AS audience FROM visit_signups) AS signups`;
@@ -6,7 +7,7 @@ export function filters(query) {
   const bind=v=>{values.push(v);return `$${values.length}`;};
   const q=(p.get('q')||'').trim();if(q.length>254)throw new Error('filters');
   if(q)clauses.push(`email ILIKE ${bind('%'+q.replace(/[\\%_]/g,'\\$&')+'%')}`);
-  for(const [key,column,allowed] of [['city','city',CITIES],['language','language',['en','fr','el']]]){
+  for(const [key,column,allowed] of [['city','city',CITIES],['language','language',LANGUAGES]]){
     const v=p.get(key);if(v){if(!allowed.includes(v))throw new Error('filters');clauses.push(`${column} = ${bind(v)}`);}
   }
   const audience=p.get('audience')||'app',status=p.get('status')||'active';
