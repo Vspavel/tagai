@@ -43,3 +43,26 @@ schema.push(
 FOR c IN SELECT conname FROM pg_constraint WHERE conrelid=tab::regclass AND contype='c' AND pg_get_constraintdef(oid) LIKE '%language%' LOOP EXECUTE format('ALTER TABLE %I DROP CONSTRAINT %I',tab,c.conname); END LOOP;
 EXECUTE format('ALTER TABLE %I ADD CONSTRAINT %I CHECK(language IN (''en'',''fr'',''el'',''es'',''it'',''de'',''ru''))',tab,tab||'_language_check'); END LOOP; END $$`
 );
+// Prelaunch v2: preserve the existing lists and add independent purposes.
+schema.push(
+ `CREATE TABLE IF NOT EXISTS update_signups (LIKE waitlist_signups INCLUDING ALL)`,
+ `CREATE TABLE IF NOT EXISTS subscription_requests (
+  id uuid PRIMARY KEY, email text NOT NULL, language text NOT NULL, selections jsonb NOT NULL,
+  cities jsonb NOT NULL DEFAULT '[]', token_hash text NOT NULL UNIQUE,
+  purpose text NOT NULL CHECK(purpose IN ('subscribe','access')), created_at timestamptz NOT NULL DEFAULT now(),
+  expires_at timestamptz NOT NULL DEFAULT now()+interval '24 hours', confirmed_at timestamptz,
+  mail_status text NOT NULL DEFAULT 'pending', welcome_status text NOT NULL DEFAULT 'pending'
+ )`,
+ `CREATE INDEX IF NOT EXISTS subscription_requests_expiry ON subscription_requests(expires_at)`,
+ `CREATE TABLE IF NOT EXISTS subscriber_profiles (email text PRIMARY KEY, visit_cities jsonb NOT NULL DEFAULT '[]', frequency text, updated_at timestamptz NOT NULL DEFAULT now(), expires_at timestamptz NOT NULL DEFAULT now()+interval '12 months')`,
+ `CREATE TABLE IF NOT EXISTS enquiries (
+  id uuid PRIMARY KEY, kind text NOT NULL CHECK(kind IN ('pilot','visit')), email text NOT NULL,
+  language text NOT NULL, details jsonb NOT NULL, status text NOT NULL DEFAULT 'new' CHECK(status IN ('new','in_progress','closed')),
+  version integer NOT NULL DEFAULT 1, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(),
+  expires_at timestamptz NOT NULL DEFAULT now()+interval '12 months', notification_status text NOT NULL DEFAULT 'not_configured',
+  receipt_status text NOT NULL DEFAULT 'not_configured', source text NOT NULL DEFAULT ''
+ )`,
+ `CREATE INDEX IF NOT EXISTS enquiries_status_created ON enquiries(status,created_at)`,
+ `ALTER TABLE privacy_requests DROP CONSTRAINT IF EXISTS privacy_requests_audience_check`,
+ `ALTER TABLE privacy_requests ADD CONSTRAINT privacy_requests_audience_check CHECK(audience IN ('app','visits','updates','both'))`
+);

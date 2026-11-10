@@ -1,7 +1,7 @@
 import {LANGUAGES} from './content-model.mjs';
 import { guard, databaseQuery } from './access.mjs';
-const CITIES=['Cyprus','Paris','London','Dubai','Abu Dhabi','Doha','New York','Hong Kong','Elsewhere'];
-const records=`(SELECT *, 'app'::text AS audience FROM waitlist_signups UNION ALL SELECT *, 'visits'::text AS audience FROM visit_signups) AS signups`;
+const CITIES=['Cyprus','Paris','London','Dubai','Abu Dhabi','Doha','New York','Hong Kong','Elsewhere','Nicosia','Limassol'];
+const records=`(SELECT *, 'app'::text AS audience FROM waitlist_signups UNION ALL SELECT *, 'visits'::text AS audience FROM visit_signups UNION ALL SELECT *, 'updates'::text AS audience FROM update_signups) AS signups`;
 export function filters(query) {
   const p=new URLSearchParams(query),values=[],clauses=[];
   const bind=v=>{values.push(v);return `$${values.length}`;};
@@ -11,7 +11,8 @@ export function filters(query) {
     const v=p.get(key);if(v){if(!allowed.includes(v))throw new Error('filters');clauses.push(`${column} = ${bind(v)}`);}
   }
   const audience=p.get('audience')||'app',status=p.get('status')||'active';
-  if(!['app','visits'].includes(audience)||!['active','withdrawn','all'].includes(status))throw new Error('filters');
+  if(!['app','visits','updates'].includes(audience)||!['active','withdrawn','all'].includes(status))throw new Error('filters');
+  const verified=p.get('verified')||'all';if(!['all','yes','no'].includes(verified))throw Error('filters');if(verified!=='all')clauses.push(`email_verified = ${bind(verified==='yes')}`);
   clauses.push(`audience = ${bind(audience)}`);if(status!=='all')clauses.push(`status = ${bind(status)}`);
   for(const [key,op,plus] of [['from','>=',''],['to','<'," + interval '1 day'"]]){
     const v=p.get(key);if(v){if(!/^20\d{2}-\d{2}-\d{2}$/.test(v)||!Number.isFinite(Date.parse(v))||new Date(v).toISOString().slice(0,10)!==v)throw new Error('filters');clauses.push(`created_at ${op} ((${bind(v)}::date${plus})::timestamp AT TIME ZONE 'Asia/Nicosia')`);}
@@ -39,7 +40,7 @@ export function createAdminHandler({env=process.env,query}={}){
         if(rows.length>10000)return res.status(422).json({error:'export_limit'});
         res.setHeader('Content-Type','text/csv; charset=utf-8');res.setHeader('Content-Disposition','attachment; filename="tagai-'+f.audience+'.csv"');return res.status(200).send(csv(rows));
       }
-      const totals=await sql(`SELECT count(*)::int AS total,count(*) FILTER(WHERE created_at>=now()-interval '7 days')::int AS week,count(*) FILTER(WHERE created_at>=now()-interval '30 days')::int AS month FROM ${records} ${f.where}`,f.values);
+      const totals=await sql(`SELECT count(*)::int AS total,count(*) FILTER(WHERE email_verified AND status='active')::int AS confirmed,count(*) FILTER(WHERE created_at>=now()-interval '7 days')::int AS week,count(*) FILTER(WHERE created_at>=now()-interval '30 days')::int AS month FROM ${records} ${f.where}`,f.values);
       const page=Math.min(f.page,Math.max(1,Math.ceil(totals[0].total/50)));
       const rows=await sql(`SELECT ${cols} FROM ${records} ${f.where} ORDER BY created_at DESC,id DESC LIMIT 50 OFFSET $${f.values.length+1}`,[...f.values,(page-1)*50]);
       const charts=await Promise.allSettled([

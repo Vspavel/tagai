@@ -29,7 +29,7 @@ export function createHandler({ db = database, env = process.env, clock = Date.n
     let statement, values;
     if (body.kind === 'privacy') {
       if (!['withdraw','access','correct','delete','other'].includes(body.requestType) || typeof body.message !== 'string' || body.message.length > 1500) return send(400,{error:'invalid'});
-      if (!['app','visits','both'].includes(body.audience || 'app')) return send(400,{error:'invalid'});
+      if (!['app','visits','updates','both'].includes(body.audience || 'app')) return send(400,{error:'invalid'});
       if (body.requestId && !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.requestId)) return send(400,{error:'invalid'});
       statement = `WITH quota AS (${quota}), saved AS (
         INSERT INTO privacy_requests(id,email,language,request_type,message,audience)
