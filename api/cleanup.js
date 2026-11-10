@@ -9,7 +9,11 @@ export default async function handler(req,res) {
       'DELETE FROM request_limits WHERE expires_at < now()',
       'DELETE FROM waitlist_signups WHERE expires_at < now()',
       'DELETE FROM visit_signups WHERE expires_at < now()',
-      'DELETE FROM privacy_requests WHERE expires_at < now()'
+      'DELETE FROM privacy_requests WHERE expires_at < now()',
+      'DELETE FROM update_signups WHERE expires_at < now()',
+      'DELETE FROM subscription_requests WHERE expires_at < now()',
+      'DELETE FROM subscriber_profiles WHERE expires_at < now()',
+      'DELETE FROM enquiries WHERE expires_at < now()'
     ]);
     return res.status(200).json({ok:true});
   } catch { return res.status(503).json({error:'unavailable'}); }
