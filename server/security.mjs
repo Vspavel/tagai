@@ -30,7 +30,7 @@ export function rateBucket(address, secret, now = Date.now()) {
 export function allowedOrigin(origin, env) {
   const allowed = new Set(['https://tagai.art','https://www.tagai.art']);
   for (const host of [env.VERCEL_URL, env.VERCEL_BRANCH_URL]) if (host) allowed.add(`https://${host}`);
-  if (!env.VERCEL) { for(const host of ['localhost','terminal.local'])allowed.add(`http://${host}:${env.DEV_PORT||4174}`); }
+  if (!env.VERCEL) { for(const host of ['localhost','terminal.local','127.0.0.1'])allowed.add(`http://${host}:${env.DEV_PORT||4174}`); }
   return allowed.has(origin);
 }
 export function normalizeEmail(input) {
