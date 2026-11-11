@@ -10,7 +10,8 @@ function message(form,text,state=''){const el=$('[role=status]',form);el.textCon
 function inputError(field,text){field.setAttribute('aria-invalid',text?'true':'false');const error=document.getElementById(field.getAttribute('aria-describedby'));if(error){error.textContent=text;error.hidden=!text;}}
 function valid(form){let first;for(const el of form.elements){if(!el.willValidate)continue;const text=el.validity.valueMissing?u.required:!el.validity.valid?(el.type==='email'?u.invalidEmail:el.type==='url'?u.invalidWebsite:u.required):'';inputError(el,text);if(text&&!first)first=el;}if(first){first.focus();return false;}return true;}
 function lock(form,value){$('fieldset',form).disabled=value;form.setAttribute('aria-busy',String(value));activeRequests+=value?1:-1;}
-const campaign=new URLSearchParams(location.search);const source=/^[a-zA-Z0-9_.-]{1,80}$/.test(campaign.get('utm_source')||'')?campaign.get('utm_source'):'';
+const campaign=new URLSearchParams(location.search);const attribution=()=>window.tagaiAttribution?.snapshot()||{first:{},last:{}};
+function trackActivation(d){for(const x of d.activated||[])if(x.audience==='app')window.tagaiTrack?.(x.firstTime?'app_waitlist_confirmed':'app_waitlist_reactivated',{attribution:x.attribution});}
 for(const form of document.querySelectorAll('form[data-form]')){
  ids.set(form.id,uuid());let saved=false,lastEmailStatus='';
  const button=$('button[type=submit]',form),retry=$('.form-retry',form);
@@ -21,14 +22,15 @@ for(const form of document.querySelectorAll('form[data-form]')){
  form.addEventListener('submit',async e=>{
   e.preventDefault();if(form.getAttribute('aria-busy')==='true'||!valid(form))return;
   const values=Object.fromEntries(new FormData(form)),type=form.dataset.form;
-  const common={email:values.email?.trim(),website:values.website||'',requestId:ids.get(form.id),source};
+  const common={email:values.email?.trim(),website:values.website||'',requestId:ids.get(form.id),attribution:attribution()};
   let body=type==='subscription'?{...common,action:'subscription',selections:[form.dataset.audience,...(values.updates?['updates']:[])],cities:new FormData(form).getAll('cities')}:type==='access'?{...common,action:'access'}:type==='enquiry'?{...common,action:'enquiry',kind:form.dataset.kind,details:Object.fromEntries(['organisation','role','city','otherCity','name','dates','url','message'].map(k=>[k,values[k]||'']))}:{...common,kind:'privacy',requestType:values.requestType,audience:values.audience,message:values.message||''};
   lock(form,true);retry.hidden=true;message(form,u.pending);
-  try{const d=await post(body,type==='privacy');if(!d.accepted)throw Error(u.uncertain);saved=true;lastEmailStatus=d.emailStatus;window.tagaiTrack?.(type==='enquiry'?'enquiry_submit_success':'waitlist_submit_success');
+  try{const d=await post(body,type==='privacy');if(!d.accepted)throw Error(u.uncertain);saved=true;lastEmailStatus=d.emailStatus;if(type==='enquiry'&&d.created)window.tagaiTrack?.('enquiry_submit_success',{form_kind:form.dataset.kind});
+   for(const audience of d.createdAudiences||[])window.tagaiTrack?.(audience==='app'?'waitlist_submit_success':audience==='visits'?'visit_subscription_created':'updates_subscription_created',{attribution:attribution()});
    if(type==='enquiry'){const status=$('[role=status]',form);status.replaceChildren();const title=document.createElement('strong');title.textContent=form.dataset.success;const p=document.createElement('p');p.textContent=form.dataset.after;status.append(title,p);$('fieldset',form).hidden=true;}
    else if(type==='privacy'){message(form,u.received);$('fieldset',form).hidden=true;}
    else {message(form,d.emailStatus==='sent'?u.sent:d.emailStatus==='failed'?u.mailFailed:u.savedNoEmail,d.emailStatus==='failed'?'error':'');$('fieldset',form).hidden=d.emailStatus!=='failed';retry.hidden=d.emailStatus==='not_configured';retry.textContent=u.resend;}
-  }catch(error){message(form,Object.values(errors).includes(error.message)?error.message:u.uncertain,'error');retry.hidden=false;window.tagaiTrack?.('waitlist_submit_error');}
+  }catch(error){message(form,Object.values(errors).includes(error.message)?error.message:u.uncertain,'error');retry.hidden=false;window.tagaiTrack?.(form.dataset.audience==='app'?'waitlist_submit_error':'form_submit_error',{form_kind:form.dataset.kind||form.dataset.audience||type});}
   finally{lock(form,false);}
  });
  init();
@@ -50,8 +52,8 @@ const match=location.hash.match(/^#token=([A-Za-z0-9_-]{43})$/);let accessToken=
  const status=$('#token-status');
  const render=d=>{$('#confirm-form').hidden=true;$('#preferences-form').hidden=false;$('#verified-email').textContent=d.email;for(const[k,v]of Object.entries(d.preferences))$('#preferences-form').elements[k].checked=v;};
  (async()=>{status.textContent=u.checking;try{const d=await call({action:'inspect'});if(d.needsConfirmation){status.textContent=u.confirmIntro;$('#confirm-selection').textContent=d.selections.map(k=>u[k+'Choice']).join(' · ');$('#confirm-form').hidden=false;}else{status.textContent=u.alreadyConfirmed;render(d);}}catch(e){status.textContent=e.message;$('#manage-access').hidden=false;}})();
- $('#confirm-form').onsubmit=async e=>{e.preventDefault();const b=$('button',e.target);b.disabled=true;try{const d=await call({action:'confirm'});status.textContent=u.confirmed;render(d);if(d.preferences.app)$('#frequency-form').hidden=false;}catch(err){status.textContent=err.message;}finally{b.disabled=false;}};
- async function preferences(all=false){const form=$('#preferences-form');if($('fieldset',form).disabled)return;const preferences=Object.fromEntries(['app','updates','visits'].map(k=>[k,!all&&form.elements[k].checked]));lock(form,true);try{const d=await call({action:'preferences',preferences});render(d);message(form,all?u.allUnsubscribed:u.preferencesSaved);}catch(e){message(form,e.message,'error');}finally{lock(form,false);}}
+ $('#confirm-form').onsubmit=async e=>{e.preventDefault();const b=$('button',e.target);b.disabled=true;try{const d=await call({action:'confirm'});trackActivation(d);status.textContent=u.confirmed;render(d);if(d.preferences.app)$('#frequency-form').hidden=false;}catch(err){status.textContent=err.message;}finally{b.disabled=false;}};
+ async function preferences(all=false){const form=$('#preferences-form');if($('fieldset',form).disabled)return;const preferences=Object.fromEntries(['app','updates','visits'].map(k=>[k,!all&&form.elements[k].checked]));lock(form,true);try{const d=await call({action:'preferences',preferences});trackActivation(d);render(d);message(form,all?u.allUnsubscribed:u.preferencesSaved);}catch(e){message(form,e.message,'error');}finally{lock(form,false);}}
  $('#preferences-form').onsubmit=e=>{e.preventDefault();preferences();};$('#unsubscribe-all').onclick=()=>preferences(true);
  $('#frequency-form').onsubmit=async e=>{e.preventDefault();const f=e.target,b=$('button',f);b.disabled=true;try{await call({action:'frequency',frequency:f.elements.frequency.value});$('[role=status]',f).textContent=u.answerSaved;}catch(err){$('[role=status]',f).textContent=err.message;}finally{b.disabled=false;}};
  $('#skip-frequency').onclick=()=>$('#frequency-form').hidden=true;

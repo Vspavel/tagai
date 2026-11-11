@@ -23,7 +23,7 @@ export function filters(query) {
   return {where:'WHERE '+clauses.join(' AND '),values,page,audience};
 }
 export function csv(rows){
-  const keys=['email','audience','status','city','language','created_at','source','campaign','email_verified','consent_at','consent_version'];
+  const keys=['email','audience','status','city','language','created_at','source','medium','campaign','content','term','last_source','last_medium','last_campaign','email_verified','expires_at','consent_at','consent_version'];
   const cell=v=>{let s=v instanceof Date?v.toISOString():String(v??'');if(/^[\s]*[=+\-@]|^[\t\r\n]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';};
   return '\ufeff'+[keys.map(cell).join(','),...rows.map(r=>keys.map(k=>cell(r[k])).join(','))].join('\r\n');
 }
@@ -34,13 +34,16 @@ export function createAdminHandler({env=process.env,query}={}){
     const p=new URL(req.url,'https://admin.invalid').searchParams;let f;try{f=filters(p);}catch{return res.status(400).json({error:'filters'});}
     const sql=query||databaseQuery(env);
     try{
-      const cols='id,email,city,language,created_at,source,campaign,email_verified,consent_at,consent_version,status,audience';
+      const cols="id,email,city,language,created_at,source,campaign,email_verified,expires_at,consent_at,consent_version,status,audience,attribution,attribution->'first'->>'medium' AS medium,attribution->'first'->>'content' AS content,attribution->'first'->>'term' AS term,attribution->'last'->>'source' AS last_source,attribution->'last'->>'medium' AS last_medium,attribution->'last'->>'campaign' AS last_campaign";
       if(p.get('format')==='csv'){
         const rows=await sql(`SELECT ${cols} FROM ${records} ${f.where} ORDER BY created_at DESC,id DESC LIMIT 10001`,f.values);
         if(rows.length>10000)return res.status(422).json({error:'export_limit'});
         res.setHeader('Content-Type','text/csv; charset=utf-8');res.setHeader('Content-Disposition','attachment; filename="tagai-'+f.audience+'.csv"');return res.status(200).send(csv(rows));
       }
-      const totals=await sql(`SELECT count(*)::int AS total,count(*) FILTER(WHERE email_verified AND status='active')::int AS confirmed,count(*) FILTER(WHERE created_at>=now()-interval '7 days')::int AS week,count(*) FILTER(WHERE created_at>=now()-interval '30 days')::int AS month FROM ${records} ${f.where}`,f.values);
+      const totals=await sql(`SELECT count(*)::int AS total,count(*) FILTER(WHERE email_verified AND status='active' AND expires_at>now())::int AS confirmed,count(*) FILTER(WHERE created_at>=now()-interval '7 days')::int AS week,count(*) FILTER(WHERE created_at>=now()-interval '30 days')::int AS month FROM ${records} ${f.where}`,f.values);
+      // The campaign goal is global and app-only, independent of every table/chart filter.
+      const goal=(await sql(`SELECT count(DISTINCT email) FILTER(WHERE email_verified AND status='active' AND expires_at>now())::int AS active,count(*) FILTER(WHERE NOT email_verified AND status='active' AND expires_at>now())::int AS pending FROM waitlist_signups WHERE source<>'INTERNAL_QA'`,[]))[0];
+      const goalSources=await sql(`SELECT source AS label,count(DISTINCT email)::int AS count FROM waitlist_signups WHERE email_verified AND status='active' AND expires_at>now() AND source<>'INTERNAL_QA' GROUP BY source ORDER BY count DESC LIMIT 20`,[]);
       const page=Math.min(f.page,Math.max(1,Math.ceil(totals[0].total/50)));
       const rows=await sql(`SELECT ${cols} FROM ${records} ${f.where} ORDER BY created_at DESC,id DESC LIMIT 50 OFFSET $${f.values.length+1}`,[...f.values,(page-1)*50]);
       const charts=await Promise.allSettled([
@@ -49,7 +52,7 @@ export function createAdminHandler({env=process.env,query}={}){
         sql(`SELECT source AS label,count(*)::int AS count FROM ${records} ${f.where} GROUP BY 1 ORDER BY 2 DESC LIMIT 20`,f.values)
       ]);
       const chartData=Object.fromEntries(['daily','cities','sources'].map((key,i)=>[key,charts[i].status==='fulfilled'?charts[i].value:null]));
-      return res.status(200).json({...totals[0],rows,...chartData,page,pageSize:50,generatedAt:new Date().toISOString(),ga4:env.GA4_PROPERTY_ID&&/^\d+$/.test(env.GA4_PROPERTY_ID)?env.GA4_PROPERTY_ID:null});
+      return res.status(200).json({...totals[0],goal:{...goal,target:1000,sources:goalSources},rows,...chartData,page,pageSize:50,generatedAt:new Date().toISOString(),ga4:env.GA4_PROPERTY_ID&&/^\d+$/.test(env.GA4_PROPERTY_ID)?env.GA4_PROPERTY_ID:null});
     }catch{console.error('admin_data_unavailable');return res.status(503).json({error:'unavailable'});}
   };
 }

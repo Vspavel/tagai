@@ -66,3 +66,11 @@ schema.push(
  `ALTER TABLE privacy_requests DROP CONSTRAINT IF EXISTS privacy_requests_audience_check`,
  `ALTER TABLE privacy_requests ADD CONSTRAINT privacy_requests_audience_check CHECK(audience IN ('app','visits','updates','both'))`
 );
+
+// Equal column order across the three lists keeps the existing admin UNION compatible.
+for (const table of ['waitlist_signups','visit_signups','update_signups']) schema.push(
+ `ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS attribution jsonb NOT NULL DEFAULT '{}'`,
+ `ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS activation_count integer NOT NULL DEFAULT 0`,
+ `UPDATE ${table} SET activation_count=1 WHERE email_verified AND activation_count=0`
+);
+schema.push(`ALTER TABLE subscription_requests ADD COLUMN IF NOT EXISTS attribution jsonb NOT NULL DEFAULT '{}'`);
