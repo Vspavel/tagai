@@ -19,7 +19,9 @@
       "features.2.heading": "Build a virtual collection",
       "features.2.body": "Save the work, its context and your own observations together.",
       "features.3.heading": "Return to the conversation",
-      "features.3.body": "Come back after the exhibition to revisit a question or add something you notice later."
+      "features.3.body": "Come back after the exhibition to revisit a question or add something you notice later.",
+      "intro": "Explore art. Build virtual collections. Share your vision.",
+      "collection.label": "Example collection based on Pavel’s real encounters"
     },
     "sarah-awad": {
       "label": "A real encounter shared by TAGAI founder Pavel Shynkarenko. The dialogue is an edited example from a simulation of the future app; the recognition and purchase of the painting happened before it.",
@@ -53,7 +55,9 @@
       "report.example.rows.2.0": "C",
       "report.example.rows.2.1": "20",
       "report.example.rows.2.2": "48 min",
-      "report.example.rows.2.3": "20%"
+      "report.example.rows.2.3": "20%",
+      "event.launch": "March 2027",
+      "event.date": "May 2027"
     }
   },
   "ru": {
@@ -79,7 +83,9 @@
       "features.3.body": "После выставки вернитесь к своему вопросу или добавьте то, что заметили позже.",
       "faqs.2.question": "Нужно ли покупать произведения или разбираться в искусстве?",
       "second.link": "Прочитать историю встречи",
-      "second.label": "Реальная встреча, исследованная в пробном разговоре по сценарию TAGAI"
+      "second.label": "Реальная встреча, исследованная в пробном разговоре по сценарию TAGAI",
+      "intro": "Исследуйте искусство. Создавайте виртуальные коллекции. Делитесь своим взглядом.",
+      "collection.label": "Пример коллекции на основе реальных встреч Павла"
     },
     "sarah-awad": {
       "label": "Реальная встреча с произведением из опыта основателя TAGAI Павла Шинкаренко. Диалог — отредактированный пример пробного разговора по сценарию будущего приложения. Узнавание образа и покупка картины произошли до него.",
@@ -114,7 +120,9 @@
       "report.example.rows.2.0": "C",
       "report.example.rows.2.1": "20",
       "report.example.rows.2.2": "48 мин",
-      "report.example.rows.2.3": "20%"
+      "report.example.rows.2.3": "20%",
+      "event.launch": "Март 2027",
+      "event.date": "Май 2027"
     }
   },
   "fr": {
@@ -137,7 +145,9 @@
       "features.2.heading": "Créez une collection virtuelle",
       "features.2.body": "Conservez ensemble l’œuvre, son contexte et vos propres observations.",
       "features.3.heading": "Reprenez la conversation",
-      "features.3.body": "Après l’exposition, revenez sur une question ou ajoutez ce que vous remarquez plus tard."
+      "features.3.body": "Après l’exposition, revenez sur une question ou ajoutez ce que vous remarquez plus tard.",
+      "intro": "Explorez l’art. Créez des collections virtuelles. Partagez votre regard.",
+      "collection.label": "Exemple de collection fondé sur les rencontres réelles de Pavel"
     },
     "sarah-awad": {
       "label": "Une rencontre réelle partagée par Pavel Shynkarenko, fondateur de TAGAI. Le dialogue est un exemple adapté d’une simulation de la future application ; la reconnaissance de la figure et l’achat du tableau ont eu lieu auparavant.",
@@ -171,7 +181,9 @@
       "report.example.rows.2.0": "C",
       "report.example.rows.2.1": "20",
       "report.example.rows.2.2": "48 min",
-      "report.example.rows.2.3": "20%"
+      "report.example.rows.2.3": "20%",
+      "event.launch": "Mars 2027",
+      "event.date": "Mai 2027"
     }
   },
   "el": {
@@ -194,7 +206,9 @@
       "features.2.heading": "Δημιουργήστε μια εικονική συλλογή",
       "features.2.body": "Αποθηκεύστε μαζί το έργο, το πλαίσιό του και τις δικές σας παρατηρήσεις.",
       "features.3.heading": "Επιστρέψτε στη συζήτηση",
-      "features.3.body": "Μετά την έκθεση, επιστρέψτε σε μια ερώτηση ή προσθέστε κάτι που παρατηρήσατε αργότερα."
+      "features.3.body": "Μετά την έκθεση, επιστρέψτε σε μια ερώτηση ή προσθέστε κάτι που παρατηρήσατε αργότερα.",
+      "intro": "Εξερευνήστε την τέχνη. Δημιουργήστε εικονικές συλλογές. Μοιραστείτε τη ματιά σας.",
+      "collection.label": "Παράδειγμα συλλογής βασισμένο στις πραγματικές συναντήσεις του Pavel"
     },
     "sarah-awad": {
       "label": "Μια πραγματική συνάντηση με ένα έργο, όπως τη μοιράστηκε ο ιδρυτής του TAGAI, Pavel Shynkarenko. Ο διάλογος είναι επιμελημένο παράδειγμα προσομοίωσης της μελλοντικής εφαρμογής· η αναγνώριση της μορφής και η αγορά του πίνακα είχαν προηγηθεί.",
@@ -228,7 +242,9 @@
       "report.example.rows.2.0": "C",
       "report.example.rows.2.1": "20",
       "report.example.rows.2.2": "48 λεπτά",
-      "report.example.rows.2.3": "20%"
+      "report.example.rows.2.3": "20%",
+      "event.launch": "Μάρτιος 2027",
+      "event.date": "Μάιος 2027"
     }
   },
   "es": {
@@ -251,7 +267,9 @@
       "features.2.heading": "Crea una colección virtual",
       "features.2.body": "Guarda juntos la obra, su contexto y tus propias observaciones.",
       "features.3.heading": "Retoma la conversación",
-      "features.3.body": "Vuelve después de la exposición para retomar una pregunta o añadir algo que observes más tarde."
+      "features.3.body": "Vuelve después de la exposición para retomar una pregunta o añadir algo que observes más tarde.",
+      "intro": "Explora el arte. Crea colecciones virtuales. Comparte tu mirada.",
+      "collection.label": "Colección de ejemplo basada en encuentros reales de Pavel"
     },
     "sarah-awad": {
       "label": "Un encuentro real compartido por Pavel Shynkarenko, fundador de TAGAI. El diálogo es un ejemplo editado de una simulación de la futura app; el reconocimiento de la figura y la compra del cuadro ocurrieron antes.",
@@ -285,7 +303,9 @@
       "report.example.rows.2.0": "C",
       "report.example.rows.2.1": "20",
       "report.example.rows.2.2": "48 min",
-      "report.example.rows.2.3": "20%"
+      "report.example.rows.2.3": "20%",
+      "event.launch": "Marzo de 2027",
+      "event.date": "Mayo de 2027"
     }
   },
   "it": {
@@ -308,7 +328,9 @@
       "features.2.heading": "Crea una collezione virtuale",
       "features.2.body": "Conserva insieme l’opera, il suo contesto e le tue osservazioni.",
       "features.3.heading": "Riprendi la conversazione",
-      "features.3.body": "Torna dopo la mostra per riprendere una domanda o aggiungere qualcosa che noti in seguito."
+      "features.3.body": "Torna dopo la mostra per riprendere una domanda o aggiungere qualcosa che noti in seguito.",
+      "intro": "Esplora l’arte. Crea collezioni virtuali. Condividi il tuo sguardo.",
+      "collection.label": "Collezione di esempio basata su incontri reali di Pavel"
     },
     "sarah-awad": {
       "label": "Un incontro reale condiviso da Pavel Shynkarenko, fondatore di TAGAI. Il dialogo è un esempio rielaborato di una simulazione della futura app; il riconoscimento della figura e l’acquisto del dipinto sono avvenuti prima.",
@@ -342,7 +364,9 @@
       "report.example.rows.2.0": "C",
       "report.example.rows.2.1": "20",
       "report.example.rows.2.2": "48 min",
-      "report.example.rows.2.3": "20%"
+      "report.example.rows.2.3": "20%",
+      "event.launch": "Marzo 2027",
+      "event.date": "Maggio 2027"
     }
   },
   "de": {
@@ -365,7 +389,9 @@
       "features.2.heading": "Baue eine virtuelle Sammlung auf",
       "features.2.body": "Speichere das Werk, seinen Kontext und deine eigenen Beobachtungen zusammen.",
       "features.3.heading": "Setze das Gespräch fort",
-      "features.3.body": "Kehre nach der Ausstellung zu einer Frage zurück oder ergänze etwas, das dir später auffällt."
+      "features.3.body": "Kehre nach der Ausstellung zu einer Frage zurück oder ergänze etwas, das dir später auffällt.",
+      "intro": "Entdecke Kunst. Gestalte virtuelle Sammlungen. Teile deinen Blick.",
+      "collection.label": "Beispielsammlung aus Pavels tatsächlichen Begegnungen"
     },
     "sarah-awad": {
       "label": "Eine tatsächliche Begegnung, erzählt von TAGAI-Gründer Pavel Shynkarenko. Der Dialog ist ein bearbeitetes Beispiel aus einer Simulation der künftigen App; das Erkennen der Figur und der Kauf des Gemäldes fanden vorher statt.",
@@ -399,7 +425,9 @@
       "report.example.rows.2.0": "C",
       "report.example.rows.2.1": "20",
       "report.example.rows.2.2": "48 Min.",
-      "report.example.rows.2.3": "20%"
+      "report.example.rows.2.3": "20%",
+      "event.launch": "März 2027",
+      "event.date": "Mai 2027"
     }
   }
 }
