@@ -46,14 +46,15 @@ for(const l of ['en','fr','el']){
  all[l].site=Object.fromEntries(Object.entries(flatten(all[l].site)).filter(([k])=>interfaceKeys.includes(k.split('.')[0])));
 }
 const additional=Object.fromEntries(await Promise.all(['es','it','de','ru'].map(async l=>[l,JSON.parse(await readFile('content/translation-'+l+'.json','utf8'))])));
+const revision=JSON.parse(await readFile('content/content-clarity-2026-11-11.json','utf8'));
 const documents=Object.entries(structure).map(([id,[kind,slug]])=>{
- const en=flatten(all.en[id]);
+ const en={...flatten(all.en[id]),...revision.en?.[id]};
  const localized=Object.fromEntries(LANGUAGES.slice(1).map(l=>{
-  const fields=additional[l]?.[id]||flatten(all[l][id]);
+  const fields={...(additional[l]?.[id]||flatten(all[l][id])),...revision[l]?.[id]};
   validateTranslation(en,fields);
   return [l,{fields,sourceFields:en,provider:'editorial-ai',reviewed:false,locked:[]}];
  }));
- return {id,kind,slug,indexable:!['site','manage'].includes(id),enabled:!['updates','launch-update'].includes(id),schemaVersion:2,baselineRevision:'2026-11-10-seven-languages',previousSourceHash:previous[id]||null,source:en,translations:localized};
+ return {id,kind,slug,indexable:!['site','manage'].includes(id),enabled:!['updates','launch-update'].includes(id),schemaVersion:2,baselineRevision:'2026-11-11-content-clarity',previousSourceHash:previous[id]||null,source:en,translations:localized};
 });
 await writeFile('admin/server/content-seed.json',JSON.stringify(documents,null,2)+'\n');
 console.log('Prepared content: '+documents.length+' documents × '+LANGUAGES.join('/'));
