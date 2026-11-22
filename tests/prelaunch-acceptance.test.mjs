@@ -1,14 +1,18 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';
 import {PGlite} from '@electric-sql/pglite';import {schema} from '../server/schema.mjs';import {createRegistrationHandler} from '../server/registrations.mjs';
 const seed=JSON.parse(await readFile(new URL('../admin/server/content-seed.json',import.meta.url),'utf8'));
-test('November copy preserves chronology, seven matching languages, and illustrative arithmetic',()=>{
+test('November copy preserves chronology and seven matching languages, with the facts of 22 November',()=>{
  for(const lang of ['en','fr','el','es','it','de','ru']){
  const fields=id=>{const d=seed.find(d=>d.id===id);return lang==='en'?d.source:d.translations[lang].fields;};
  const h=fields('home'),p=fields('partners'),s=fields('sarah-awad');assert.ok(h.appDescription);assert.ok(!h.launch.endsWith('.'));assert.ok(h['encounter.dialogue.2.text']);
- for(const [i,n,t,share]of [[0,40,120,50],[1,30,72,30],[2,20,48,20]]){assert.equal(p[`report.example.rows.${i}.1`],String(n));assert.equal(parseInt(p[`report.example.rows.${i}.2`]),t);assert.equal(p[`report.example.rows.${i}.3`],share+'%');}
+ // Founder decisions of 22.11.2026: early access in December 2026, no visits at launch, the report by the measures the product has, the operator named.
+ const u=fields('site'),v=fields('visits');assert.match(h.launch,/2026/);assert.doesNotMatch(h.launch+h['faqs.0.answer']+h['signup.body']+v.intro+v.description+u.featuresLabel,/2027/);
+ assert.equal(h['faqs.6.question'],undefined);assert.equal(h['visits.body'],undefined);assert.equal(p['report.example.heading'],undefined);assert.equal(v['form.heading'],undefined);
+ assert.equal(p['report.table'].trim().split('\n').length,7);assert.match(u['paragraphs.0'],/SM COUNTRY CLUB LTD/);assert.match(u['paragraphs.0'],/493218/);assert.match(u.operatorLine,/SM COUNTRY CLUB LTD/);
  assert.match(s.body,/\*\*TAGAI\*\*/);assert.ok(s.interpretationNote);assert.equal((s.sources.match(/https:\/\//g)||[]).length,2);
  }
  assert.equal(seed.find(d=>d.id==='home').translations.ru.fields['faqs.2.question'],'Нужно ли покупать произведения или разбираться в искусстве?');
+ assert.equal(seed.find(d=>d.id==='visits').indexable,false);
 });
 test('all affected form categories reject invalid email, persist and deduplicate independently, and fail closed on storage errors',async()=>{
  const db=new PGlite();try{for(const sql of schema)await db.exec(sql);const query=async(s,p)=>(await db.query(s,p)).rows;
