@@ -1,0 +1,265 @@
+{
+ "revision": "2026-11-22-facts",
+ "note": "Founder decisions of 22.11.2026: early access December 2026; visits are not part of the first version; venue report by the measures the product has; operator SM COUNTRY CLUB LTD; first version free.",
+ "remove": {
+  "home": [
+   "faqs.6.question",
+   "faqs.6.answer",
+   "visits.heading",
+   "visits.body"
+  ],
+  "partners": [
+   "report.example.heading",
+   "report.example.label",
+   "report.example.note",
+   "report.example.headers.0",
+   "report.example.headers.1",
+   "report.example.headers.2",
+   "report.example.headers.3",
+   "report.example.rows.0.0",
+   "report.example.rows.0.1",
+   "report.example.rows.0.2",
+   "report.example.rows.0.3",
+   "report.example.rows.1.0",
+   "report.example.rows.1.1",
+   "report.example.rows.1.2",
+   "report.example.rows.1.3",
+   "report.example.rows.2.0",
+   "report.example.rows.2.1",
+   "report.example.rows.2.2",
+   "report.example.rows.2.3"
+  ],
+  "visits": [
+   "guestLink",
+   "experience.heading",
+   "experience.body",
+   "experience.cities",
+   "experience.status",
+   "form.heading",
+   "form.body",
+   "form.cta",
+   "form.micro",
+   "form.success",
+   "form.after",
+   "hostLabel",
+   "hostLink"
+  ]
+ },
+ "en": {
+  "home": {
+   "launch": "Early access: December 2026",
+   "faqs.0.answer": "Early access is planned for December 2026. TAGAI opens in your phone’s browser, with nothing to install. Join the waitlist to hear when it opens.",
+   "faqs.1.answer": "Identifying an artwork from a photo, three questions that help you look closer, context with sources, and a virtual collection you can return to.",
+   "faqs.4.answer": "Yes. The first version of TAGAI is free.",
+   "signup.body": "Join the TAGAI waitlist for early access in December 2026."
+  },
+  "site": {
+   "featuresLabel": "Not part of the first version",
+   "paragraphs.0": "TAGAI is a product of SM COUNTRY CLUB LTD, a company registered in Cyprus under number HE 493218, at Agiou Antreou 127-137, 3036 Limassol. Use Manage my signup for questions about your personal data or to withdraw from the waitlist.",
+   "operatorLine": "© 2026 TAGAI, a product of SM COUNTRY CLUB LTD",
+   "paragraphs.5": "Requests sent through Manage my signup are stored for handling by the project operator and retained for up to 12 months. We may ask you to verify your email ownership before disclosing or changing records. Please do not include sensitive information. Updated 22 November 2026."
+  },
+  "visits": {
+   "description": "Private visits with artists are not part of the first version of TAGAI. Leave your email to hear when visits are announced.",
+   "intro": "Private visits with artists are not part of the first version of TAGAI.",
+   "guest.body": "Leave your email and we’ll write to you when visits are announced."
+  },
+  "partners": {
+   "description": "TAGAI will ask each visitor three questions that help them look more closely, and offer context about the work on request, with sources.",
+   "intro": "TAGAI will ask each visitor three questions that help them look more closely, and offer context about the work on request, with sources.\n\nThe pilot will come with a report by artwork: how many times its page was opened, how often it was saved, and how many questions visitors asked. These figures will support your evaluation of the visitor experience.",
+   "experience.body": "A visitor scans the QR code next to a work, or photographs the work. TAGAI asks three questions: “What do you see?”, “What do you feel about this work?” and whether they notice a connection with a time, a place, an event, a story, or other works and artists. Then it offers the context you have provided, with a source for every statement.\n\nThe visitor can keep the work in a virtual collection and return to it after the event.\n\nTogether with your team, we will agree the works, source materials and context used for the pilot.",
+   "report.table": "| Report measure | What it shows |\n| --- | --- |\n| Scans | How many times the work’s page was opened from its QR code during the period |\n| Devices | How many different devices opened it |\n| Saves | How many times visitors saved the work to their collection |\n| Questions | How many questions visitors asked about the work |\n| Contact requests | How many visitors asked you to contact them about the work |",
+   "report.body": "The report will show these figures in total, by artwork, by day and by language. They describe recorded activity through TAGAI; they do not measure the quality of an encounter, understanding or enjoyment.",
+   "preparation.steps.1": "**Prepare the context** Collect context for each work from agreed materials and sources. You approve every statement before visitors see it.",
+   "preparation.note": "The first version of TAGAI is free of charge for venues. Pilot scope and preparation will be agreed for each event.",
+   "event.body": "VIMA is planned as TAGAI’s first partner event. The pilot will bring the three questions, context for the works and a report by artwork into a live fair setting.",
+   "event.launch": "December 2026"
+  }
+ },
+ "ru": {
+  "home": {
+   "launch": "Ранний доступ — декабрь 2026 года",
+   "faqs.0.answer": "Ранний доступ запланирован на декабрь 2026 года. TAGAI открывается в браузере телефона, устанавливать ничего не нужно. Запишитесь в лист ожидания, чтобы узнать об открытии.",
+   "faqs.1.answer": "Опознание произведения по фото, три вопроса, которые помогают смотреть внимательнее, контекст с источниками и виртуальная коллекция, к которой можно возвращаться.",
+   "faqs.4.answer": "Да. Первая версия TAGAI бесплатна.",
+   "signup.body": "Запишитесь в лист ожидания TAGAI для раннего доступа в декабре 2026 года."
+  },
+  "site": {
+   "featuresLabel": "Не входит в первую версию",
+   "paragraphs.0": "TAGAI — продукт компании SM COUNTRY CLUB LTD, зарегистрированной на Кипре под номером HE 493218, по адресу Agiou Antreou 127-137, 3036 Limassol. В разделе управления подписками можно задать вопрос о персональных данных или выйти из листа ожидания.",
+   "operatorLine": "© 2026 TAGAI — продукт компании SM COUNTRY CLUB LTD",
+   "paragraphs.5": "Обращения через раздел управления подписками хранятся для обработки оператором проекта до 12 месяцев. Перед раскрытием или изменением записей мы можем попросить подтвердить владение адресом электронной почты. Не включайте в обращения чувствительные сведения. Обновлено 22 ноября 2026 года."
+  },
+  "visits": {
+   "description": "Частные визиты к художникам не входят в первую версию TAGAI. Оставьте адрес почты, чтобы узнать об анонсах визитов.",
+   "intro": "Частные визиты к художникам не входят в первую версию TAGAI.",
+   "guest.body": "Оставьте адрес почты, и мы напишем, когда визиты будут объявлены."
+  },
+  "partners": {
+   "description": "TAGAI задаст каждому посетителю три вопроса, которые помогают смотреть внимательнее, и по запросу покажет контекст работы с источниками.",
+   "intro": "TAGAI задаст каждому посетителю три вопроса, которые помогают смотреть внимательнее, и по запросу покажет контекст работы с источниками.\n\nК пилоту прилагается отчёт по каждой работе: сколько раз открыли её страницу, сколько раз её сохранили и сколько вопросов задали посетители. Эти данные помогут вам оценить опыт посетителей.",
+   "experience.body": "Посетитель сканирует QR-код рядом с работой или фотографирует её. TAGAI задаёт три вопроса: «Что вы видите?», «Что вы чувствуете в связи с этой работой?» и замечает ли он связь с временем, местом, событием, сюжетом или другими произведениями и художниками. Затем показывает контекст, который предоставили вы, с источником у каждого утверждения.\n\nПосетитель сможет сохранить работу в виртуальной коллекции и вернуться к ней после события.\n\nВместе с вашей командой мы согласуем произведения, материалы и контекст для пилота.",
+   "report.table": "| Показатель | Что он показывает |\n| --- | --- |\n| Сканирования | Сколько раз страницу работы открыли по её QR-коду за период |\n| Устройства | С какого числа разных устройств её открывали |\n| Сохранения | Сколько раз посетители сохранили работу в свою коллекцию |\n| Вопросы | Сколько вопросов о работе задали посетители |\n| Запросы на контакт | Сколько посетителей попросили вас связаться с ними по поводу работы |",
+   "report.body": "Отчёт покажет эти числа в целом, по работам, по дням и по языкам. Они описывают зафиксированную активность в TAGAI и не измеряют качество встречи, понимание или удовольствие.",
+   "preparation.steps.1": "**Подготовить контекст** Соберём контекст для каждой работы из согласованных материалов и источников. Вы одобряете каждое утверждение до того, как его увидят посетители.",
+   "preparation.note": "Первая версия TAGAI для площадок бесплатна. Объём пилота и подготовка согласуются для каждого события.",
+   "event.body": "VIMA планируется как первое партнёрское событие TAGAI. Пилот принесёт на действующую ярмарку три вопроса, контекст работ и отчёт по каждой работе.",
+   "event.launch": "Декабрь 2026"
+  }
+ },
+ "fr": {
+  "home": {
+   "launch": "Accès anticipé : décembre 2026",
+   "faqs.0.answer": "L’accès anticipé est prévu pour décembre 2026. TAGAI s’ouvre dans le navigateur de votre téléphone, sans rien installer. Inscrivez-vous sur la liste d’attente pour être informé de son ouverture.",
+   "faqs.1.answer": "L’identification d’une œuvre à partir d’une photo, trois questions qui aident à regarder de plus près, du contexte avec ses sources et une collection virtuelle à laquelle revenir.",
+   "faqs.4.answer": "Oui. La première version de TAGAI est gratuite.",
+   "signup.body": "Rejoignez la liste d’attente TAGAI pour l’accès anticipé en décembre 2026."
+  },
+  "site": {
+   "featuresLabel": "Ne fait pas partie de la première version",
+   "paragraphs.0": "TAGAI est un produit de SM COUNTRY CLUB LTD, société immatriculée à Chypre sous le numéro HE 493218, dont le siège est situé Agiou Antreou 127-137, 3036 Limassol. Utilisez Gérer mon inscription pour toute question sur vos données ou pour quitter la liste d’attente.",
+   "operatorLine": "© 2026 TAGAI, un produit de SM COUNTRY CLUB LTD",
+   "paragraphs.5": "Les demandes envoyées via Gérer mon inscription sont conservées pour traitement par le responsable du projet, pendant 12 mois au maximum. Une vérification de votre adresse peut être nécessaire avant la communication ou la modification de données. N’incluez pas d’informations sensibles. Mise à jour : 22 novembre 2026."
+  },
+  "visits": {
+   "description": "Les visites privées chez les artistes ne font pas partie de la première version de TAGAI. Laissez votre e-mail pour être informé des annonces de visites.",
+   "intro": "Les visites privées chez les artistes ne font pas partie de la première version de TAGAI.",
+   "guest.body": "Laissez votre e-mail et nous vous écrirons lorsque des visites seront annoncées."
+  },
+  "partners": {
+   "description": "TAGAI posera à chaque visiteur trois questions qui l’aident à regarder plus attentivement, et proposera à la demande du contexte sur l’œuvre, avec ses sources.",
+   "intro": "TAGAI posera à chaque visiteur trois questions qui l’aident à regarder plus attentivement, et proposera à la demande du contexte sur l’œuvre, avec ses sources.\n\nLe pilote s’accompagnera d’un rapport par œuvre : combien de fois sa page a été ouverte, combien de fois elle a été ajoutée à une collection et combien de questions les visiteurs ont posées. Ces données contribueront à votre évaluation de l’expérience des visiteurs.",
+   "experience.body": "Un visiteur scanne le code QR placé près d’une œuvre, ou la photographie. TAGAI pose trois questions : « Que voyez-vous ? », « Que ressentez-vous face à cette œuvre ? », et s’il remarque un lien avec une époque, un lieu, un événement, une histoire ou d’autres œuvres et artistes. Il propose ensuite le contexte que vous avez fourni, avec une source pour chaque affirmation.\n\nLe visiteur peut conserver l’œuvre dans une collection virtuelle et y revenir après l’événement.\n\nAvec votre équipe, nous conviendrons des œuvres, sources et éléments de contexte utilisés pour le pilote.",
+   "report.table": "| Mesure du rapport | Ce qu’elle montre |\n| --- | --- |\n| Scans | Nombre d’ouvertures de la page de l’œuvre à partir de son code QR pendant la période |\n| Appareils | Nombre d’appareils différents qui l’ont ouverte |\n| Ajouts à la collection | Nombre de fois où des visiteurs ont ajouté l’œuvre à leur collection |\n| Questions | Nombre de questions posées par les visiteurs sur l’œuvre |\n| Demandes de contact | Nombre de visiteurs qui vous ont demandé de les contacter au sujet de l’œuvre |",
+   "report.body": "Le rapport présentera ces chiffres au total, par œuvre, par jour et par langue. Ils décrivent l’activité enregistrée dans TAGAI ; ils ne mesurent ni la qualité d’une rencontre, ni la compréhension, ni le plaisir ressenti.",
+   "preparation.steps.1": "**Préparer le contexte** Réunir le contexte de chaque œuvre à partir des documents et sources convenus. Vous approuvez chaque affirmation avant que les visiteurs ne la voient.",
+   "preparation.note": "La première version de TAGAI est gratuite pour les lieux. Le périmètre et la préparation du pilote seront convenus pour chaque événement.",
+   "event.body": "VIMA est prévu comme premier événement partenaire de TAGAI. Le pilote apportera les trois questions, le contexte des œuvres et un rapport par œuvre dans le contexte réel d’une foire.",
+   "event.launch": "Décembre 2026"
+  }
+ },
+ "el": {
+  "home": {
+   "launch": "Πρώιμη πρόσβαση: Δεκέμβριος 2026",
+   "faqs.0.answer": "Η πρώιμη πρόσβαση προγραμματίζεται για τον Δεκέμβριο του 2026. Το TAGAI ανοίγει στο πρόγραμμα περιήγησης του κινητού σας, χωρίς καμία εγκατάσταση. Εγγραφείτε στη λίστα αναμονής για να μάθετε πότε ανοίγει.",
+   "faqs.1.answer": "Αναγνώριση έργου από φωτογραφία, τρεις ερωτήσεις που σας βοηθούν να κοιτάξετε πιο προσεκτικά, πληροφορίες για το πλαίσιο με πηγές και μια εικονική συλλογή στην οποία μπορείτε να επιστρέφετε.",
+   "faqs.4.answer": "Ναι. Η πρώτη έκδοση του TAGAI είναι δωρεάν.",
+   "signup.body": "Εγγραφείτε στη λίστα αναμονής του TAGAI για πρώιμη πρόσβαση τον Δεκέμβριο του 2026."
+  },
+  "site": {
+   "featuresLabel": "Δεν περιλαμβάνεται στην πρώτη έκδοση",
+   "paragraphs.0": "Το TAGAI είναι προϊόν της SM COUNTRY CLUB LTD, εταιρείας εγγεγραμμένης στην Κύπρο με αριθμό HE 493218, με έδρα στη διεύθυνση Agiou Antreou 127-137, 3036 Limassol. Χρησιμοποιήστε τη Διαχείριση εγγραφής για ερωτήσεις σχετικά με τα δεδομένα σας ή για αποχώρηση από τη λίστα αναμονής.",
+   "operatorLine": "© 2026 TAGAI, προϊόν της SM COUNTRY CLUB LTD",
+   "paragraphs.5": "Τα αιτήματα μέσω της Διαχείρισης εγγραφής αποθηκεύονται για εξέταση από τον υπεύθυνο του έργου, έως 12 μήνες. Ενδέχεται να ζητήσουμε επαλήθευση του email πριν από την κοινοποίηση ή αλλαγή δεδομένων. Μην περιλαμβάνετε ευαίσθητες πληροφορίες. Ενημέρωση: 22 Νοεμβρίου 2026."
+  },
+  "visits": {
+   "description": "Οι ιδιωτικές επισκέψεις σε καλλιτέχνες δεν περιλαμβάνονται στην πρώτη έκδοση του TAGAI. Αφήστε το email σας για να ενημερωθείτε όταν ανακοινωθούν επισκέψεις.",
+   "intro": "Οι ιδιωτικές επισκέψεις σε καλλιτέχνες δεν περιλαμβάνονται στην πρώτη έκδοση του TAGAI.",
+   "guest.body": "Αφήστε το email σας και θα σας γράψουμε όταν ανακοινωθούν επισκέψεις."
+  },
+  "partners": {
+   "description": "Το TAGAI θα θέτει σε κάθε επισκέπτη τρεις ερωτήσεις που τον βοηθούν να παρατηρήσει πιο προσεκτικά και θα προσφέρει, κατόπιν αιτήματος, πληροφορίες για το πλαίσιο του έργου, με πηγές.",
+   "intro": "Το TAGAI θα θέτει σε κάθε επισκέπτη τρεις ερωτήσεις που τον βοηθούν να παρατηρήσει πιο προσεκτικά και θα προσφέρει, κατόπιν αιτήματος, πληροφορίες για το πλαίσιο του έργου, με πηγές.\n\nΤο πιλοτικό πρόγραμμα θα συνοδεύεται από αναφορά ανά έργο: πόσες φορές ανοίχτηκε η σελίδα του, πόσες φορές αποθηκεύτηκε και πόσες ερωτήσεις έθεσαν οι επισκέπτες. Αυτά τα στοιχεία θα υποστηρίξουν την αξιολόγηση της εμπειρίας των επισκεπτών από την ομάδα σας.",
+   "experience.body": "Ο επισκέπτης σαρώνει τον κωδικό QR δίπλα σε ένα έργο ή το φωτογραφίζει. Το TAGAI θέτει τρεις ερωτήσεις: «Τι βλέπετε;», «Τι νιώθετε για αυτό το έργο;» και αν παρατηρεί κάποια σύνδεση με μια εποχή, έναν τόπο, ένα γεγονός, μια ιστορία ή με άλλα έργα και καλλιτέχνες. Στη συνέχεια προσφέρει τις πληροφορίες για το πλαίσιο που έχετε δώσει εσείς, με πηγή για κάθε δήλωση.\n\nΟ επισκέπτης μπορεί να κρατήσει το έργο σε εικονική συλλογή και να επιστρέψει σε αυτό μετά την εκδήλωση.\n\nΜαζί με την ομάδα σας, θα συμφωνήσουμε τα έργα, τις πηγές και το πλαίσιο του πιλοτικού προγράμματος.",
+   "report.table": "| Μέτρηση αναφοράς | Τι δείχνει |\n| --- | --- |\n| Σαρώσεις | Πόσες φορές ανοίχτηκε η σελίδα του έργου από τον κωδικό QR του κατά την περίοδο |\n| Συσκευές | Από πόσες διαφορετικές συσκευές ανοίχτηκε |\n| Αποθηκεύσεις | Πόσες φορές οι επισκέπτες αποθήκευσαν το έργο στη συλλογή τους |\n| Ερωτήσεις | Πόσες ερωτήσεις έθεσαν οι επισκέπτες για το έργο |\n| Αιτήματα επικοινωνίας | Πόσοι επισκέπτες ζήτησαν να επικοινωνήσετε μαζί τους για το έργο |",
+   "report.body": "Η αναφορά θα δείχνει αυτά τα στοιχεία συνολικά, ανά έργο, ανά ημέρα και ανά γλώσσα. Περιγράφουν την καταγεγραμμένη δραστηριότητα μέσω του TAGAI· δεν μετρούν την ποιότητα της συνάντησης με ένα έργο, την κατανόηση ή την απόλαυση.",
+   "preparation.steps.1": "**Προετοιμάστε το πλαίσιο** Συγκεντρώστε το πλαίσιο κάθε έργου από συμφωνημένο υλικό και πηγές. Εγκρίνετε κάθε δήλωση πριν τη δουν οι επισκέπτες.",
+   "preparation.note": "Η πρώτη έκδοση του TAGAI είναι δωρεάν για τους χώρους τέχνης. Το πεδίο και η προετοιμασία του πιλοτικού προγράμματος θα συμφωνούνται για κάθε εκδήλωση.",
+   "event.body": "Η VIMA προγραμματίζεται ως η πρώτη συνεργαζόμενη εκδήλωση του TAGAI. Το πιλοτικό πρόγραμμα θα φέρει τις τρεις ερωτήσεις, το πλαίσιο των έργων και μια αναφορά ανά έργο στο πραγματικό περιβάλλον μιας φουάρ.",
+   "event.launch": "Δεκέμβριος 2026"
+  }
+ },
+ "es": {
+  "home": {
+   "launch": "Acceso anticipado: diciembre de 2026",
+   "faqs.0.answer": "El acceso anticipado está previsto para diciembre de 2026. TAGAI se abre en el navegador de tu teléfono, sin instalar nada. Únete a la lista de espera para saber cuándo se abre.",
+   "faqs.1.answer": "Identificación de una obra a partir de una foto, tres preguntas que te ayudan a mirar con más atención, contexto con fuentes y una colección virtual a la que puedes volver.",
+   "faqs.4.answer": "Sí. La primera versión de TAGAI es gratuita.",
+   "signup.body": "Únete a la lista de espera de TAGAI para el acceso anticipado en diciembre de 2026."
+  },
+  "site": {
+   "featuresLabel": "No forma parte de la primera versión",
+   "paragraphs.0": "TAGAI es un producto de SM COUNTRY CLUB LTD, sociedad registrada en Chipre con el número HE 493218 y domicilio en Agiou Antreou 127-137, 3036 Limassol. Utiliza la gestión de suscripciones para consultar sobre tus datos personales o salir de la lista de espera.",
+   "operatorLine": "© 2026 TAGAI, un producto de SM COUNTRY CLUB LTD",
+   "paragraphs.5": "Las solicitudes enviadas desde la gestión de suscripciones se guardan para que las atienda el responsable del proyecto y se conservan hasta 12 meses. Podemos pedirte que verifiques la titularidad del correo antes de revelar o modificar registros. No incluyas información sensible. Actualizado el 22 de noviembre de 2026."
+  },
+  "visits": {
+   "description": "Las visitas privadas a artistas no forman parte de la primera versión de TAGAI. Deja tu correo para saber cuándo se anuncian visitas.",
+   "intro": "Las visitas privadas a artistas no forman parte de la primera versión de TAGAI.",
+   "guest.body": "Deja tu correo y te escribiremos cuando se anuncien visitas."
+  },
+  "partners": {
+   "description": "TAGAI hará a cada visitante tres preguntas que le ayudan a observar con más atención y ofrecerá, a petición, contexto sobre la obra, con sus fuentes.",
+   "intro": "TAGAI hará a cada visitante tres preguntas que le ayudan a observar con más atención y ofrecerá, a petición, contexto sobre la obra, con sus fuentes.\n\nEl piloto irá acompañado de un informe por obra: cuántas veces se abrió su página, cuántas veces se guardó y cuántas preguntas hicieron los visitantes. Estos datos apoyarán tu evaluación de la experiencia del visitante.",
+   "experience.body": "El visitante escanea el código QR junto a una obra, o la fotografía. TAGAI hace tres preguntas: «¿Qué ve usted?», «¿Qué siente ante esta obra?» y si nota alguna relación con una época, un lugar, un acontecimiento, una historia u otras obras y artistas. Después ofrece el contexto que tú has proporcionado, con una fuente para cada afirmación.\n\nEl visitante podrá guardar la obra en una colección virtual y volver a ella después del evento.\n\nJunto a tu equipo, acordaremos las obras, materiales y contexto del piloto.",
+   "report.table": "| Medida del informe | Qué muestra |\n| --- | --- |\n| Escaneos | Cuántas veces se abrió la página de la obra desde su código QR durante el período |\n| Dispositivos | Desde cuántos dispositivos distintos se abrió |\n| Guardados | Cuántas veces los visitantes guardaron la obra en su colección |\n| Preguntas | Cuántas preguntas hicieron los visitantes sobre la obra |\n| Solicitudes de contacto | Cuántos visitantes te pidieron que los contactaras a propósito de la obra |",
+   "report.body": "El informe mostrará estas cifras en total, por obra, por día y por idioma. Describen la actividad registrada a través de TAGAI; no miden la calidad del encuentro, la comprensión o el disfrute.",
+   "preparation.steps.1": "**Preparar el contexto** Reunir el contexto de cada obra con materiales y fuentes acordados. Tú apruebas cada afirmación antes de que la vean los visitantes.",
+   "preparation.note": "La primera versión de TAGAI es gratuita para los espacios. El alcance y la preparación del piloto se acordarán para cada evento.",
+   "event.body": "VIMA está previsto como primer evento asociado de TAGAI. El piloto llevará las tres preguntas, el contexto de las obras y un informe por obra al contexto real de una feria.",
+   "event.launch": "Diciembre de 2026"
+  }
+ },
+ "it": {
+  "home": {
+   "launch": "Accesso anticipato: dicembre 2026",
+   "faqs.0.answer": "L’accesso anticipato è previsto per dicembre 2026. TAGAI si apre nel browser del tuo telefono, senza installare nulla. Iscriviti alla lista d’attesa per sapere quando aprirà.",
+   "faqs.1.answer": "Identificazione di un’opera da una foto, tre domande che ti aiutano a guardare con più attenzione, contesto con le fonti e una collezione virtuale a cui tornare.",
+   "faqs.4.answer": "Sì. La prima versione di TAGAI è gratuita.",
+   "signup.body": "Iscriviti alla lista d’attesa di TAGAI per l’accesso anticipato a dicembre 2026."
+  },
+  "site": {
+   "featuresLabel": "Non fa parte della prima versione",
+   "paragraphs.0": "TAGAI è un prodotto di SM COUNTRY CLUB LTD, società registrata a Cipro con il numero HE 493218, con sede in Agiou Antreou 127-137, 3036 Limassol. Usa la gestione delle iscrizioni per domande sui tuoi dati personali o per uscire dalla lista d’attesa.",
+   "operatorLine": "© 2026 TAGAI, un prodotto di SM COUNTRY CLUB LTD",
+   "paragraphs.5": "Le richieste inviate tramite la gestione delle iscrizioni sono conservate per la gestione da parte del responsabile del progetto per un massimo di 12 mesi. Possiamo chiederti di verificare la titolarità dell’email prima di comunicare o modificare i dati. Non includere informazioni sensibili. Aggiornato il 22 novembre 2026."
+  },
+  "visits": {
+   "description": "Le visite private agli artisti non fanno parte della prima versione di TAGAI. Lascia la tua email per sapere quando saranno annunciate le visite.",
+   "intro": "Le visite private agli artisti non fanno parte della prima versione di TAGAI.",
+   "guest.body": "Lascia la tua email e ti scriveremo quando saranno annunciate le visite."
+  },
+  "partners": {
+   "description": "TAGAI porrà a ogni visitatore tre domande che lo aiutano a osservare con più attenzione e offrirà, su richiesta, contesto sull’opera, con le fonti.",
+   "intro": "TAGAI porrà a ogni visitatore tre domande che lo aiutano a osservare con più attenzione e offrirà, su richiesta, contesto sull’opera, con le fonti.\n\nIl progetto pilota sarà accompagnato da un rapporto per opera: quante volte è stata aperta la sua pagina, quante volte è stata salvata e quante domande hanno posto i visitatori. Questi dati sosterranno la valutazione dell’esperienza dei visitatori.",
+   "experience.body": "Il visitatore scansiona il codice QR accanto a un’opera, oppure la fotografa. TAGAI pone tre domande: «Che cosa vede?», «Che cosa le fa provare quest’opera?» e se nota un legame con un periodo, un luogo, un evento, un racconto o altre opere e artisti. Poi offre il contesto che hai fornito tu, con una fonte per ogni affermazione.\n\nIl visitatore potrà conservare l’opera in una collezione virtuale e tornarci dopo l’evento.\n\nInsieme al tuo team concorderemo opere, materiali e contesto del progetto pilota.",
+   "report.table": "| Misura del rapporto | Cosa mostra |\n| --- | --- |\n| Scansioni | Quante volte la pagina dell’opera è stata aperta dal suo codice QR nel periodo |\n| Dispositivi | Da quanti dispositivi diversi è stata aperta |\n| Salvataggi | Quante volte i visitatori hanno salvato l’opera nella propria collezione |\n| Domande | Quante domande hanno posto i visitatori sull’opera |\n| Richieste di contatto | Quanti visitatori ti hanno chiesto di essere contattati a proposito dell’opera |",
+   "report.body": "Il rapporto mostrerà questi dati in totale, per opera, per giorno e per lingua. Descrivono l’attività registrata attraverso TAGAI; non misurano la qualità dell’incontro, la comprensione o il piacere.",
+   "preparation.steps.1": "**Preparare il contesto** Raccogliere il contesto di ogni opera con materiali e fonti concordati. Approvi tu ogni affermazione prima che i visitatori la vedano.",
+   "preparation.note": "La prima versione di TAGAI è gratuita per gli spazi. Ambito e preparazione del progetto pilota saranno concordati per ogni evento.",
+   "event.body": "VIMA è previsto come primo evento partner di TAGAI. Il progetto pilota porterà le tre domande, il contesto delle opere e un rapporto per opera nel contesto reale di una fiera.",
+   "event.launch": "Dicembre 2026"
+  }
+ },
+ "de": {
+  "home": {
+   "launch": "Früher Zugang: Dezember 2026",
+   "faqs.0.answer": "Der frühe Zugang ist für Dezember 2026 geplant. TAGAI öffnet sich im Browser deines Telefons, ohne Installation. Trage dich in die Warteliste ein, um zu erfahren, wann es losgeht.",
+   "faqs.1.answer": "Werkidentifikation per Foto, drei Fragen, die dir helfen, genauer hinzuschauen, Kontext mit Quellen und eine virtuelle Sammlung, zu der du zurückkehren kannst.",
+   "faqs.4.answer": "Ja. Die erste Version von TAGAI ist kostenlos.",
+   "signup.body": "Trage dich für den frühen Zugang im Dezember 2026 in die TAGAI-Warteliste ein."
+  },
+  "site": {
+   "featuresLabel": "Nicht Teil der ersten Version",
+   "paragraphs.0": "TAGAI ist ein Produkt der SM COUNTRY CLUB LTD, einer in Zypern unter der Nummer HE 493218 eingetragenen Gesellschaft mit Sitz in Agiou Antreou 127-137, 3036 Limassol. Nutze die Abo-Verwaltung für Fragen zu deinen personenbezogenen Daten oder um die Warteliste zu verlassen.",
+   "operatorLine": "© 2026 TAGAI, ein Produkt der SM COUNTRY CLUB LTD",
+   "paragraphs.5": "Anfragen über die Abo-Verwaltung werden zur Bearbeitung durch den Projektbetreiber bis zu 12 Monate gespeichert. Vor der Offenlegung oder Änderung von Datensätzen können wir einen Nachweis verlangen, dass dir die E-Mail-Adresse gehört. Bitte gib keine sensiblen Informationen an. Aktualisiert am 22. November 2026."
+  },
+  "visits": {
+   "description": "Private Künstlerbesuche sind nicht Teil der ersten Version von TAGAI. Hinterlasse deine E-Mail-Adresse, um zu erfahren, wann Besuche angekündigt werden.",
+   "intro": "Private Künstlerbesuche sind nicht Teil der ersten Version von TAGAI.",
+   "guest.body": "Hinterlasse deine E-Mail-Adresse. Wir schreiben dir, wenn Besuche angekündigt werden."
+  },
+  "partners": {
+   "description": "TAGAI stellt jedem Besucher drei Fragen, die helfen, genauer hinzuschauen, und bietet auf Anfrage Kontext zum Werk, mit Quellen.",
+   "intro": "TAGAI stellt jedem Besucher drei Fragen, die helfen, genauer hinzuschauen, und bietet auf Anfrage Kontext zum Werk, mit Quellen.\n\nZum Pilot gehört ein Bericht je Werk: wie oft seine Seite geöffnet wurde, wie oft es gespeichert wurde und wie viele Fragen Besucher gestellt haben. Diese Zahlen unterstützen die Bewertung des Besuchserlebnisses.",
+   "experience.body": "Ein Besucher scannt den QR-Code neben einem Werk oder fotografiert es. TAGAI stellt drei Fragen: „Was sehen Sie?“, „Was fühlen Sie bei diesem Werk?“ und ob er einen Zusammenhang mit einer Zeit, einem Ort, einem Ereignis, einer Geschichte oder anderen Werken und Künstlern bemerkt. Danach bietet es den Kontext, den du bereitgestellt hast, mit einer Quelle für jede Aussage.\n\nDer Besucher kann das Werk in einer virtuellen Sammlung bewahren und nach der Veranstaltung darauf zurückkommen.\n\nGemeinsam mit deinem Team vereinbaren wir Werke, Materialien und Kontext für den Pilot.",
+   "report.table": "| Berichtskennzahl | Was sie zeigt |\n| --- | --- |\n| Scans | Wie oft die Seite des Werks im Zeitraum über seinen QR-Code geöffnet wurde |\n| Geräte | Von wie vielen verschiedenen Geräten sie geöffnet wurde |\n| Speicherungen | Wie oft Besucher das Werk in ihrer Sammlung gespeichert haben |\n| Fragen | Wie viele Fragen Besucher zum Werk gestellt haben |\n| Kontaktanfragen | Wie viele Besucher darum gebeten haben, wegen des Werks kontaktiert zu werden |",
+   "report.body": "Der Bericht zeigt diese Zahlen insgesamt, nach Werken, nach Tagen und nach Sprachen. Sie beschreiben erfasste Aktivität über TAGAI; sie messen weder die Qualität einer Begegnung noch Verständnis oder Freude.",
+   "preparation.steps.1": "**Kontext vorbereiten** Kontext zu jedem Werk anhand abgestimmter Materialien und Quellen zusammenstellen. Du gibst jede Aussage frei, bevor Besucher sie sehen.",
+   "preparation.note": "Die erste Version von TAGAI ist für Ausstellungsorte kostenlos. Umfang und Vorbereitung des Pilots werden für jede Veranstaltung vereinbart.",
+   "event.body": "VIMA ist als erste Partnerveranstaltung von TAGAI geplant. Der Pilot bringt die drei Fragen, Kontext zu den Werken und einen Bericht je Werk in den tatsächlichen Messebetrieb.",
+   "event.launch": "Dezember 2026"
+  }
+ }
+}

@@ -47,14 +47,17 @@ for(const l of ['en','fr','el']){
 }
 const additional=Object.fromEntries(await Promise.all(['es','it','de','ru'].map(async l=>[l,JSON.parse(await readFile('content/translation-'+l+'.json','utf8'))])));
 const revision=JSON.parse(await readFile('content/content-clarity-2026-11-11.json','utf8'));
+// Founder decisions of 22.11.2026: a second layer over the November copy, with the keys it retires.
+const facts=JSON.parse(await readFile('content/facts-2026-11-22.json','utf8'));
+const retire=(id,fields)=>Object.fromEntries(Object.entries(fields).filter(([k])=>!(facts.remove[id]||[]).includes(k)));
 const documents=Object.entries(structure).map(([id,[kind,slug]])=>{
- const en={...flatten(all.en[id]),...revision.en?.[id]};
+ const en=retire(id,{...flatten(all.en[id]),...revision.en?.[id],...facts.en?.[id]});
  const localized=Object.fromEntries(LANGUAGES.slice(1).map(l=>{
-  const fields={...(additional[l]?.[id]||flatten(all[l][id])),...revision[l]?.[id]};
+  const fields=retire(id,{...(additional[l]?.[id]||flatten(all[l][id])),...revision[l]?.[id],...facts[l]?.[id]});
   validateTranslation(en,fields);
   return [l,{fields,sourceFields:en,provider:'editorial-ai',reviewed:false,locked:[]}];
  }));
- return {id,kind,slug,indexable:!['site','manage'].includes(id),enabled:!['updates','launch-update'].includes(id),schemaVersion:2,baselineRevision:'2026-11-11-content-clarity',previousSourceHash:previous[id]||null,source:en,translations:localized};
+ return {id,kind,slug,indexable:!['site','manage','visits'].includes(id),enabled:!['updates','launch-update'].includes(id),schemaVersion:2,baselineRevision:facts.revision,previousSourceHash:previous[id]||null,source:en,translations:localized};
 });
 await writeFile('admin/server/content-seed.json',JSON.stringify(documents,null,2)+'\n');
 console.log('Prepared content: '+documents.length+' documents × '+LANGUAGES.join('/'));
