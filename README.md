@@ -1,6 +1,21 @@
-# TAGAI — tagai.art
+# TAGAI
 
-Production landing page in English, French and Greek, with a first-party waitlist API and PostgreSQL storage. Includes a separate protected admin project and optional consent-based GA4. Subscriber data stays in PostgreSQL; no mailing-list SaaS is used.
+TAGAI is a web app for exhibitions: take a photo of a work in a gallery, museum or at a fair, and it asks you three questions, finds out which work it is and shows what is known about it, with a source for every statement. Galleries, museums and art fairs get QR codes beside the works, the context they approve and a report by artwork. Early access opens in December 2026.
+
+**Website: [tagai.art](https://tagai.art)** · [Press and facts](https://tagai.art/en/press/) · [For galleries, museums and fairs](https://tagai.art/en/venues/)
+
+## What this repository is now
+
+Since 23 November 2026 the website tagai.art is no longer built from this repository: the Vercel project `tagai` builds the new site from the main TAGAI repository. This repository keeps:
+
+- `admin/` — the private waitlist admin, Vercel project `tagai-admin` (see "Private admin" below). It is still in use.
+- the first landing page (English, French and Greek: `build.mjs`, `src/`, `content/`, `api/`, `public/`), archived. It is not deployed any more. Its texts date from November 2026 and are outdated in places — for example, they named March 2027 for early access. The current facts are on [tagai.art/en/press](https://tagai.art/en/press/).
+
+The sections below describe the archived landing page and the admin as they were set up.
+
+## The archived landing page
+
+The landing page was in English, French and Greek, with a first-party waitlist API and PostgreSQL storage, a separate protected admin project and optional consent-based GA4. Subscriber data stays in PostgreSQL; no mailing-list SaaS is used.
 
 ## Development
 
@@ -18,7 +33,7 @@ The development server on port 4174 uses an ephemeral PostgreSQL-compatible PGli
 ## Production
 
 - GitHub: `Vspavel/tagai`, production branch `main`.
-- Vercel: project `tagai`, team `vspa`, Node 24, Frankfurt functions.
+- Vercel: project `tagai`, team `vspa`, Node 24, Frankfurt functions — until 23 November 2026; the project now builds the new site from the main TAGAI repository.
 - Neon: `tagai-waitlist`, Frankfurt. Database secrets are supplied by the Vercel integration.
 - Required sensitive variables: `DATABASE_URL`, `FORM_SECRET` (at least 32 random characters), `CRON_SECRET`.
 - Build: `npm test && npm run build`. It applies additive, idempotent schema creation before generating the static site. A production build fails if the database is unavailable. Preview builds skip migrations and all APIs fail closed; use the ephemeral development database for functional QA.
@@ -42,7 +57,7 @@ English content and six translations are edited in the protected admin at `/cont
 
 Photographs and TAGAI marks were supplied by the project owner for this website. They are not licensed for general reuse. Inter and Roboto Condensed are locally hosted under the included OFL licenses; no trial fonts are deployed.
 
-Only the landing page and waitlist are operational. Product descriptions refer to the planned March 2027 early access. Do not label studio participants or VIMA as confirmed commercial partners without an explicit agreement.
+While the landing page was live, only the landing page and the waitlist were operational, and its product descriptions referred to the then planned March 2027 early access (now December 2026; see tagai.art). Do not label studio participants or VIMA as confirmed commercial partners without an explicit agreement.
 
 ## Private admin (v1.2)
 
